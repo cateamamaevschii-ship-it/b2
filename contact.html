@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | B2 Studio</title>
+  <meta name="description"
+    content="Get in touch with B2 Studio to discuss your next big architectural or interior design project.">
+  <link rel="icon" href="images/logo/favicon.svg" type="image/x-icon">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .page-hero {
+      padding: 15rem 5% 5rem 5%;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+
+    .contact-info h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .contact-info p {
+      color: var(--text-secondary);
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    .form-group {
+      margin-bottom: 2rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 1rem 0;
+      color: var(--text-primary);
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.1rem;
+      transition: var(--transition-smooth);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-bottom-color: var(--accent-color);
+    }
+
+
+    @media (max-width: 1024px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header class="scrolled always-visible">
+    <a href="index.html" class="logo">B&sup2;<span>STUDIO</span></a>
+    <div style="display:flex; align-items:center;">
+      <ul class="nav-links">
+        <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+        <li><a href="projects.html" data-i18n="nav_projects">Projects</a></li>
+        <li><a href="services.html" data-i18n="nav_services">Services</a></li>
+        <li><a href="about.html" data-i18n="nav_studio">Studio</a></li>
+        <li><a href="contact.html" class="active" data-i18n="nav_contact">Contact</a></li>
+      </ul>
+      <div class="language-switcher">
+        <button data-lang="en" class="active" data-i18n="lang_en">EN</button>
+        <button data-lang="ro" data-i18n="lang_ro">RO</button>
+        <button data-lang="ru" data-i18n="lang_ru">RU</button>
+      </div>
+      <div class="burger-menu" id="burger-menu">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <section class="page-hero">
+    <span style="color: var(--accent-color); letter-spacing: 3px; font-size: 1rem; margin-bottom: 1rem; display: block;"
+      data-i18n="contact_page_subtitle">INQUIRIES</span>
+    <h1 data-i18n="contact_page_title">Get in Touch</h1>
+  </section>
+
+  <section class="contact-section">
+    <div class="contact-grid reveal">
+      <div class="contact-form">
+        <form>
+          <div class="form-group">
+            <label data-i18n="contact_lbl_name">Name</label>
+            <input type="text" placeholder="John Doe" required data-i18n="contact_place_name">
+          </div>
+          <div class="form-group">
+            <label data-i18n="contact_lbl_email">Email</label>
+            <input type="email" placeholder="john@example.com" required data-i18n="contact_place_email">
+          </div>
+          <div class="form-group">
+            <label data-i18n="contact_lbl_msg">Message</label>
+            <textarea rows="4" placeholder="Tell us about your project..." required
+              data-i18n="contact_place_msg"></textarea>
+          </div>
+          <button type="submit" class="btn-yodezeen" data-i18n="contact_btn_send">Send Inquiry</button>
+        </form>
+      </div>
+      <div class="contact-info">
+        <h3 data-i18n="contact_hq_title">Studio Headquarters</h3>
+        <p data-i18n="contact_hq_desc">123 Midnight Avenue,<br>Suite 4A,<br>New York, NY 10001</p>
+
+        <h3 data-i18n="contact_inq_title">General Inquiries</h3>
+        <p data-i18n="contact_inq_desc">hello@b2studio.com<br>+1 (555) 123-4567</p>
+
+        <h3 data-i18n="contact_careers_title">Careers</h3>
+        <p data-i18n="contact_careers_desc">careers@b2studio.com</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-top reveal">
+      <div class="footer-brand">
+        <h2>B&sup2;<span>STUDIO</span></h2>
+        <p data-i18n="footer_desc">Creating bold, minimalist spaces globally. Bespoke architecture and interior design
+          for the modern visionary.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_nav">Navigation</h4>
+        <ul>
+          <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+          <li><a href="projects.html" data-i18n="nav_projects">Projects</a></li>
+          <li><a href="about.html" data-i18n="nav_studio">Studio</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_socials">Socials</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Pinterest</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="footer_rights">© 2026 B2 Studio. All Rights Reserved.</span>
+      <span data-i18n="footer_links">Privacy Policy | Terms of Service</span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>

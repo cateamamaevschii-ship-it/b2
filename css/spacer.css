@@ -1,0 +1,5 @@
+.section-spacer {
+  height: 60vh; /* Adjust for more/less empty scroll distance */
+  background-color: var(--bg-color);
+  width: 100%;
+}

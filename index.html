@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2 Studio | Interior Design & Architecture</title>
+  <meta name="description"
+    content="B2 Studio is a high-end interior design and architecture studio redefining modern aesthetics.">
+  <link rel="icon" href="images/logo/favicon.svg" type="image/x-icon">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="preloader-content">
+      <div class="preloader-logo">B&sup2;<span>STUDIO</span></div>
+      <div class="preloader-progress"></div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <a href="index.html" class="logo">B&sup2;<span>STUDIO</span></a>
+    <div style="display:flex; align-items:center;">
+      <ul class="nav-links">
+        <li><a href="index.html" class="active" data-i18n="nav_home">Home</a></li>
+        <li><a href="projects.html" data-i18n="nav_projects">Projects</a></li>
+        <li><a href="services.html" data-i18n="nav_services">Services</a></li>
+        <li><a href="about.html" data-i18n="nav_studio">Studio</a></li>
+        <li><a href="contact.html" data-i18n="nav_contact">Contact</a></li>
+      </ul>
+      <div class="language-switcher">
+        <button data-lang="en" class="active" data-i18n="lang_en">EN</button>
+        <button data-lang="ro" data-i18n="lang_ro">RO</button>
+        <button data-lang="ru" data-i18n="lang_ru">RU</button>
+      </div>
+      <div class="burger-menu" id="burger-menu">
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero slider-hero">
+    <div class="slides">
+      <div class="slide active" style="background-image: url('images/hero_interior.png')"></div>
+      <div class="slide" style="background-image: url('images/hero_interior_2.png')"></div>
+      <div class="slide" style="background-image: url('images/hero_interior_3.png')"></div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-title-mask">
+        <span class="hero-subtitle" data-i18n="hero_subtitle">Architecture & Interiors</span>
+      </div>
+      <div class="hero-title-mask">
+        <h1 data-i18n="hero_title">Redefining <br>Modern Aesthetics</h1>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-spacer"></div>
+  <div class="section-spacer"></div>
+
+  <!-- Animated Scroll Text Section -->
+  <section class="scroll-text-section">
+    <div class="scroll-text-container">
+      <h2 id="animated-scroll-text" data-i18n="home_scroll_text">Creating spaces that evoke profound emotion. We blur the line between architecture, interior design, and pure art.</h2>
+    </div>
+  </section>
+
+  <div class="section-spacer"></div>
+
+  <!-- Studio Mission Section (Stacked Text Scroll Animation) -->
+  <section class="studio-mission">
+    <div class="mission-sticky-wrapper">
+
+      <!-- Scene 1: Intro -->
+      <div class="mission-intro">
+        <h1 class="mission-intro-title">
+          <span data-i18n="mission_intro_1">Art Direction</span>
+          <span data-i18n="mission_intro_2">& Visual Strategy</span>
+        </h1>
+        <p class="mission-intro-desc" data-i18n="mission_desc_short">
+          WE CREATE VISUAL NARRATIVES THAT REVEAL ARCHITECTURE WITH CLARITY, EMOTION AND STRATEGY.
+        </p>
+        <div class="mission-intro-image">
+          <img src="images/hero_interior_2.png" alt="Interior Design Space">
+        </div>
+      </div>
+
+      <!-- Scene 2: Stacking Words -->
+      <div class="mission-stack-container">
+        <!-- Line 1 -->
+        <div class="stack-line" id="line-1">
+          <span class="stack-word active-initial" data-i18n="stack_1_1">REFINING</span>
+          <span class="stack-word" data-i18n="stack_1_2">CAPTURING</span>
+        </div>
+        <!-- Line 2 -->
+        <div class="stack-line" id="line-2">
+          <span class="stack-word active-initial" data-i18n="stack_2_1">RAW</span>
+          <span class="stack-word" data-i18n="stack_2_2">DRAMATIC</span>
+        </div>
+        <!-- Line 3 -->
+        <div class="stack-line" id="line-3">
+          <span class="stack-word active-initial" data-i18n="stack_3_1">ELEGANCE</span>
+          <span class="stack-word" data-i18n="stack_3_2">LIGHTING</span>
+        </div>
+      </div>
+
+      <!-- Scroll Indicator with Arrow -->
+      <div class="mission-scroll-arrow">
+        <span>SCROLL</span>
+        <div class="arrow-icon"></div>
+      </div>
+
+      <!-- Bottom Description -->
+      <div class="mission-bottom-text">
+        <p data-i18n="mission_desc">Our philosophy is rooted in monochromatic minimalism, rich textures, and dramatic lighting.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-spacer"></div>
+
+  <!-- Featured Projects -->
+  <section id="projects">
+    <div class="section-header reveal">
+      <div class="section-title">
+        <span data-i18n="featured_subtitle">01</span>
+        <h2 data-i18n="featured_title">Featured Projects</h2>
+      </div>
+      <a href="projects.html" class="view-all" data-i18n="featured_view_all">View All Work</a>
+    </div>
+
+    <div class="projects-grid">
+      <!-- Project 1 -->
+      <a href="projects.html" class="project-card reveal">
+        <div class="project-image-wrapper">
+          <img src="images/project_1.png" alt="Sleek Modern Concrete Exterior at Twilight">
+        </div>
+        <div class="project-info">
+          <h3 data-i18n="proj1_title">The Monolith Residence</h3>
+          <span class="project-category" data-i18n="proj1_cat">Architecture</span>
+        </div>
+      </a>
+      <!-- Project 2 -->
+      <a href="projects.html" class="project-card reveal">
+        <div class="project-image-wrapper">
+          <img src="images/project_2.png" alt="Luxury Moody Dark Kitchen">
+        </div>
+        <div class="project-info">
+          <h3 data-i18n="proj2_title">Noir Penthouse</h3>
+          <span class="project-category" data-i18n="proj2_cat">Interior Design</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <div class="section-spacer"></div>
+  <div class="section-spacer"></div>
+
+  <!-- Cinematic Project Showcase -->
+  <section class="cinematic-project" id="spotlight">
+    <div class="cinematic-sticky">
+      <div class="cinematic-bg"></div>
+      <div class="cinematic-overlay">
+        <h2 data-i18n="spotlight_title">B2 Studio</h2>
+        <span class="category" data-i18n="spotlight_category">Headquarters</span>
+
+        <div class="cinematic-more">
+          <a href="about.html" class="btn-yodezeen" data-i18n="btn_our_studio">Our Studio</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-top reveal">
+      <div class="footer-brand">
+        <h2>B&sup2;<span>STUDIO</span></h2>
+        <p data-i18n="footer_desc">Creating bold, minimalist spaces globally. Bespoke architecture and interior design
+          for the modern visionary.</p>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_nav">Navigation</h4>
+        <ul>
+          <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+          <li><a href="projects.html" data-i18n="nav_projects">Projects</a></li>
+          <li><a href="about.html" data-i18n="nav_studio">Studio</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 data-i18n="footer_socials">Socials</h4>
+        <ul>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Pinterest</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span data-i18n="footer_rights">© 2026 B2 Studio. All Rights Reserved.</span>
+      <span data-i18n="footer_links">Privacy Policy | Terms of Service</span>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="js/translations.js"></script>
+  <script src="js/main.js"></script>
+</body>
+
+</html>
