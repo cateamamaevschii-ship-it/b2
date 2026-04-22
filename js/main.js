@@ -56,7 +56,110 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.classList.remove('active');
       }
     });
+
+    // Run responsive line splits after translations are fully applied
+    if (typeof initResponsiveLineSplits === 'function') {
+      setTimeout(initResponsiveLineSplits, 50); 
+    }
   };
+
+  // --- Responsive Line Split Utility ---
+  function initResponsiveLineSplits() {
+    const targets = document.querySelectorAll(`
+      h1:not(.mission-intro-title):not(.hero-title-mask h1):not(.expand-title h1):not(.split-word-left):not(.split-word-right),
+      h2:not(.hero-subtitle):not(#animated-scroll-text):not(.cinematic-overlay h2):not(.split-text-reveal):not(.process-overview-big-title h2),
+      h3,
+      h4:not(.expand-title h4),
+      p:not(.team-intro-text):not(.mission-bottom-text p):not(.exp-panel p)
+    `);
+
+    const validTargets = Array.from(targets).filter(el => {
+      if (el.closest('header') || el.closest('footer') || el.closest('.contact-lines')) return false;
+      if (el.querySelector('a')) return false; // Prevent breaking nested links
+      if (!el.innerText.trim()) return false;
+      return true;
+    });
+
+    validTargets.forEach(el => {
+      // Temporarily store original text explicitly
+      let text = el.getAttribute('data-orig-text');
+      if (!text) {
+        // If it's the first time, read the text content and strip HTML cleanly safely
+        text = el.textContent.trim().replace(/\s+/g, ' ');
+        el.setAttribute('data-orig-text', text);
+      } else {
+        // If translated, we use the new translation which should have been injected by updateTranslations,
+        // wait, updateTranslations overwrites innerHTML, so textContent is now the translated text
+        text = el.textContent.trim().replace(/\s+/g, ' ');
+      }
+
+      el.innerHTML = '';
+      const words = text.split(' ');
+      const wordSpans = [];
+
+      words.forEach(word => {
+        const span = document.createElement('span');
+        span.style.display = 'inline-block';
+        span.innerText = word + ' ';
+        el.appendChild(span);
+        wordSpans.push(span);
+      });
+
+      let lastTop = -1;
+      let currentLine = [];
+      let lines = [];
+
+      wordSpans.forEach(span => {
+        const top = span.offsetTop;
+        if (top !== lastTop && currentLine.length > 0) {
+          lines.push(currentLine);
+          currentLine = [];
+        }
+        currentLine.push(span);
+        lastTop = top;
+      });
+      if (currentLine.length > 0) lines.push(currentLine);
+
+      el.innerHTML = '';
+      lines.forEach(lineWords => {
+        const wrapper = document.createElement('span');
+        wrapper.style.display = 'block';
+        wrapper.style.overflow = 'hidden';
+
+        const inner = document.createElement('span');
+        inner.style.display = 'block';
+        inner.style.transform = 'translateY(110%)';
+        inner.classList.add('r-split-line');
+
+        let lt = '';
+        lineWords.forEach(w => lt += w.innerText);
+        inner.innerText = lt;
+
+        wrapper.appendChild(inner);
+        el.appendChild(wrapper);
+      });
+
+      if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+        if (el._st) el._st.kill();
+        el._st = ScrollTrigger.create({
+          trigger: el,
+          start: "top 90%",
+          onEnter: () => {
+             gsap.to(el.querySelectorAll('.r-split-line'), {
+               y: '0%', duration: 1.0, stagger: 0.1, ease: 'power3.out'
+             });
+          }
+        });
+      }
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    if (typeof initResponsiveLineSplits === 'function') {
+      clearTimeout(window._rsT);
+      window._rsT = setTimeout(initResponsiveLineSplits, 300);
+    }
+  });
 
   // Perform initial translation
   if (typeof translations !== 'undefined') {
@@ -116,7 +219,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Reveal Elements on Scroll
+  // Smooth GSAP Staggered Entrance for Projects Grids
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+    
+    document.querySelectorAll('.projects-grid').forEach(grid => {
+      const cards = grid.querySelectorAll('.project-card');
+      
+      // Remove generic CSS reveal to let GSAP handle it perfectly
+      cards.forEach(card => card.classList.remove('reveal'));
+      
+      gsap.fromTo(cards, 
+        { y: 80, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1.2,
+          stagger: 0.15,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: grid,
+            start: "top 80%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+    });
+  }
+
+  // Generic Reveal Elements on Scroll (fallback/standard)
   const revealElements = document.querySelectorAll('.reveal');
 
   const revealOnScroll = () => {
@@ -295,51 +426,53 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // 1. Scene 1: Initial Reveal
+    // 1. Scene 1: Initial Reveal (Text Only)
     missionTl.fromTo(".mission-intro-title span", { y: 150, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, stagger: 0.3, ease: "power4.out" }, 0.2)
-             .fromTo(".mission-intro-desc", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, 1)
-             .fromTo(".mission-intro-image", { top: "120%", opacity: 0 }, { top: "60%", yPercent: -50, opacity: 1, duration: 3, ease: "power2.inOut" }, 0.5);
+             .fromTo(".mission-intro-desc", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, 1);
 
-    // 2. Clear Scene 1 (Text goes up first, NO overlap with image expansion)
-    missionTl.to(".mission-intro-title", { y: "-120vh", opacity: 0, duration: 2.5, ease: "power2.in" }, 4.5)
-             .to(".mission-intro-desc", { y: "-120vh", opacity: 0, duration: 2, ease: "power2.in" }, 4.7)
-             .to(".mission-scroll-arrow", { y: -200, opacity: 0, duration: 2 }, 4);
+    // 2. Text Exits
+    missionTl.to(".mission-intro-title", { y: "-120vh", opacity: 0, duration: 3, ease: "power3.inOut" }, 4.5)
+             .to(".mission-intro-desc", { y: "-120vh", opacity: 0, duration: 2.8, ease: "power3.inOut" }, 4.6)
+             .to(".mission-scroll-arrow", { y: -150, opacity: 0, duration: 2 }, 4.5);
 
-    // 3. Image Expands only AFTER text is out of the way
-    missionTl.to(".mission-intro-image", { 
+    // 3. Image Enters Full Screen (After text leaves)
+    missionTl.fromTo(".mission-intro-image", { top: "120%", opacity: 0 }, { 
                width: "100vw", 
                height: "100vh", 
                right: "0%", 
                top: "0%", 
                yPercent: 0,
+               y: 0, // Safety reset
                borderRadius: 0,
+               opacity: 1,
                duration: 3, 
-               ease: "power3.inOut"
-             }, 5.5);
+               ease: "power2.inOut"
+             }, 5.5)
+             .to({}, { duration: 1.5 }); // Keep timeline perfectly timed for the next scene
 
     // 4. Image Exits completely (Fade + Scale Up)
-    missionTl.to(".mission-intro-image", { scale: 1.1, opacity: 0, duration: 2, ease: "power2.inOut" }, 9);
+    missionTl.to(".mission-intro-image", { scale: 1.1, opacity: 0, duration: 2, ease: "power2.inOut" }, 10);
 
     // 5. Scene 2 Fade In (on solid black background)
-    missionTl.to(".mission-stack-container", { opacity: 1, scale: 1, duration: 2, ease: "power3.out" }, 11);
+    missionTl.to(".mission-stack-container", { opacity: 1, scale: 1, duration: 2, ease: "power3.out" }, 12);
 
     // 6. Stacking Words Logic (Progressive One-by-One Swaps)
     // --- Step 1: Word 1 Swaps (REFINING -> CAPTURING) ---
-    missionTl.to("#line-1 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 13.5)
-             .to("#line-1 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 14);
+    missionTl.to("#line-1 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 14.5)
+             .to("#line-1 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 15);
 
     // --- Step 2: Word 2 Swaps (RAW -> DRAMATIC) ---
-    missionTl.to("#line-2 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 16.5)
-             .to("#line-2 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 17);
+    missionTl.to("#line-2 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 17.5)
+             .to("#line-2 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 18);
 
     // --- Step 3: Word 3 Swaps (ELEGANCE -> LIGHTING) ---
-    missionTl.to("#line-3 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 19.5)
-             .to("#line-3 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 20);
+    missionTl.to("#line-3 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 20.5)
+             .to("#line-3 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 21);
 
     // Final Reveal of bottom motto
-    missionTl.to(".mission-bottom-text", { y: -40, opacity: 1, duration: 2, ease: "power3.out" }, 22)
-             .to(".mission-stack-container", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 25)
-             .to(".mission-bottom-text", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 25.5)
+    missionTl.to(".mission-bottom-text", { y: -40, opacity: 1, duration: 2, ease: "power3.out" }, 23)
+             .to(".mission-stack-container", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26)
+             .to(".mission-bottom-text", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26.5)
              .to({}, { duration: 5 }); // 7. Dead scroll phase for a clean 'black screen' void transition
   }
 
