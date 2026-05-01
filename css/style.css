@@ -248,10 +248,14 @@ header.nav-hidden {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0; /* Stacked tightly */
-    transform: translateY(-100%); /* Slide from top like Yodezeen or fade */
-    transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1); /* cinematic ease */
-    z-index: 999; /* Below burger menu (1002) and logo */
+    gap: 0;
+    /* Stacked tightly */
+    transform: translateY(-100%);
+    /* Slide from top like Yodezeen or fade */
+    transition: transform 0.6s cubic-bezier(0.8, 0, 0.2, 1);
+    /* cinematic ease */
+    z-index: 999;
+    /* Below burger menu (1002) and logo */
     padding-top: 5rem;
   }
 
@@ -277,7 +281,7 @@ header.nav-hidden {
   .nav-links a.active {
     color: var(--accent-color);
   }
-  
+
   .mobile-socials {
     display: flex;
     gap: 1.5rem;
@@ -1287,7 +1291,7 @@ footer {
   /* Shrunk minimum boundary to prevent screen bleed */
   font-weight: 300;
   /* Unified weight */
-  color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.349);
   /* Boosted visibility from 0.05 to 0.15 */
   z-index: 1;
   white-space: nowrap;
@@ -1315,7 +1319,7 @@ footer {
 .portrait {
   position: relative;
   /* required for absolute image overlapping */
-  height: 92vh;
+  height: 100vh;
   /* Adjusted scale to reach the top area as seen in screenshot */
   width: 50%;
 }
@@ -1451,9 +1455,14 @@ footer {
   }
 
   .portrait {
-    height: 70vh;
-    /* Adjust height for mobile side-by-side */
+    height: 100vh;
+    /* Occupies almost the entire screen height on mobile */
     width: 50%;
+  }
+
+  .portrait img {
+    object-fit: cover;
+    object-position: top center;
   }
 
   .team-footnotes {
@@ -2604,3 +2613,5 @@ footer {
     font-size: 12vw;
   }
 }
+
+.team-bg-text

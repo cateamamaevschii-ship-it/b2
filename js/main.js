@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Run responsive line splits after translations are fully applied
     if (typeof initResponsiveLineSplits === 'function') {
-      setTimeout(initResponsiveLineSplits, 50); 
+      setTimeout(initResponsiveLineSplits, 50);
     }
   };
 
@@ -145,9 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
           trigger: el,
           start: "top 90%",
           onEnter: () => {
-             gsap.to(el.querySelectorAll('.r-split-line'), {
-               y: '0%', duration: 1.0, stagger: 0.1, ease: 'power3.out'
-             });
+            gsap.to(el.querySelectorAll('.r-split-line'), {
+              y: '0%', duration: 1.0, stagger: 0.1, ease: 'power3.out'
+            });
           }
         });
       }
@@ -222,14 +222,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // Smooth GSAP Staggered Entrance for Projects Grids
   if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
-    
+
     document.querySelectorAll('.projects-grid').forEach(grid => {
       const cards = grid.querySelectorAll('.project-card');
-      
+
       // Remove generic CSS reveal to let GSAP handle it perfectly
       cards.forEach(card => card.classList.remove('reveal'));
-      
-      gsap.fromTo(cards, 
+
+      gsap.fromTo(cards,
         { y: 80, opacity: 0 },
         {
           y: 0,
@@ -428,27 +428,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 1. Scene 1: Initial Reveal (Text Only)
     missionTl.fromTo(".mission-intro-title span", { y: 150, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, stagger: 0.3, ease: "power4.out" }, 0.2)
-             .fromTo(".mission-intro-desc", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, 1);
+      .fromTo(".mission-intro-desc", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, 1);
 
     // 2. Text Exits
     missionTl.to(".mission-intro-title", { y: "-120vh", opacity: 0, duration: 3, ease: "power3.inOut" }, 4.5)
-             .to(".mission-intro-desc", { y: "-120vh", opacity: 0, duration: 2.8, ease: "power3.inOut" }, 4.6)
-             .to(".mission-scroll-arrow", { y: -150, opacity: 0, duration: 2 }, 4.5);
+      .to(".mission-intro-desc", { y: "-120vh", opacity: 0, duration: 2.8, ease: "power3.inOut" }, 4.6)
+      .to(".mission-scroll-arrow", { y: -150, opacity: 0, duration: 2 }, 4.5);
 
     // 3. Image Enters Full Screen (After text leaves)
-    missionTl.fromTo(".mission-intro-image", { top: "120%", opacity: 0 }, { 
-               width: "100vw", 
-               height: "100vh", 
-               right: "0%", 
-               top: "0%", 
-               yPercent: 0,
-               y: 0, // Safety reset
-               borderRadius: 0,
-               opacity: 1,
-               duration: 3, 
-               ease: "power2.inOut"
-             }, 5.5)
-             .to({}, { duration: 1.5 }); // Keep timeline perfectly timed for the next scene
+    missionTl.fromTo(".mission-intro-image", { top: "120%", opacity: 0 }, {
+      width: "100vw",
+      height: "100vh",
+      right: "0%",
+      top: "0%",
+      yPercent: 0,
+      y: 0, // Safety reset
+      borderRadius: 0,
+      opacity: 1,
+      duration: 3,
+      ease: "power2.inOut"
+    }, 5.5)
+      .to({}, { duration: 1.5 }); // Keep timeline perfectly timed for the next scene
 
     // 4. Image Exits completely (Fade + Scale Up)
     missionTl.to(".mission-intro-image", { scale: 1.1, opacity: 0, duration: 2, ease: "power2.inOut" }, 10);
@@ -459,21 +459,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // 6. Stacking Words Logic (Progressive One-by-One Swaps)
     // --- Step 1: Word 1 Swaps (REFINING -> CAPTURING) ---
     missionTl.to("#line-1 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 14.5)
-             .to("#line-1 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 15);
+      .to("#line-1 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 15);
 
     // --- Step 2: Word 2 Swaps (RAW -> DRAMATIC) ---
     missionTl.to("#line-2 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 17.5)
-             .to("#line-2 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 18);
+      .to("#line-2 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 18);
 
     // --- Step 3: Word 3 Swaps (ELEGANCE -> LIGHTING) ---
     missionTl.to("#line-3 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 20.5)
-             .to("#line-3 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 21);
+      .to("#line-3 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 21);
 
     // Final Reveal of bottom motto
     missionTl.to(".mission-bottom-text", { y: -40, opacity: 1, duration: 2, ease: "power3.out" }, 23)
-             .to(".mission-stack-container", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26)
-             .to(".mission-bottom-text", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26.5)
-             .to({}, { duration: 5 }); // 7. Dead scroll phase for a clean 'black screen' void transition
+      .to(".mission-stack-container", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26)
+      .to(".mission-bottom-text", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26.5)
+      .to({}, { duration: 5 }); // 7. Dead scroll phase for a clean 'black screen' void transition
   }
 
   // Cinematic GSAP ScrollTrigger Sequence
@@ -528,20 +528,26 @@ document.addEventListener("DOMContentLoaded", () => {
       scrollTrigger: {
         trigger: ".team-scroll-container",
         start: "top top",
-        end: "+=200%", // Re-tightened to match 100vh height
+        end: "+=250%", // Usor marit pentru a oferi mai mult spatiu fizic de scroll
         pin: true,
         scrub: 1.5 // Smooth sluggish inertia
       }
     });
 
     teamTl
-      .to(".team-bg-text", { scale: 1.1, opacity: 0.1, duration: 1 }, 0)
-      .to(".left-portrait", { x: "-20vw", ease: "power1.inOut", duration: 1 }, 0)
-      .to(".right-portrait", { x: "20vw", ease: "power1.inOut", duration: 1 }, 0)
+      // Phase 1: Mutarea textelor initiale si Colorarea portretelor
+      .to(".team-bg-text", { scale: 1.2, opacity: 0.5, duration: 1 }, 0)
       .to(".team-fg-text", { y: "-15vh", ease: "power1.inOut", duration: 1 }, 0)
-      .fromTo(".team-intro-text", { y: 50, opacity: 0 }, { y: 0, opacity: 1, ease: "power2.out", duration: 0.8 }, 0.2)
-      .to(".portrait img.color", { opacity: 1, duration: 1, ease: "power2.inOut" }, 0.5)
-      .to({}, { duration: 0.8 }); // Add delay at the end before unpinning
+      .to(".portrait img.color", { opacity: 1, duration: 1, ease: "power2.inOut" }, 0)
+
+      // Phase 2: Dupa ce se coloreaza, portretele se dau in parti de tot (ies din ecran) - MAI INCET SI LINIAR
+      .to(".left-portrait", { x: "-60vw", ease: "none", duration: 4 }, 1)
+      .to(".right-portrait", { x: "60vw", ease: "none", duration: 4 }, 1)
+
+      // Phase 3: Textul descriptiv apare si este pozitionat mult mai jos
+      .fromTo(".team-intro-text", { y: "25vh", opacity: 0 }, { y: "15vh", opacity: 1, ease: "power2.out", duration: 1.5 }, 3.5)
+
+      .to({}, { duration: 0.5 }); // Buffer before unpinning
 
   }
 
@@ -836,8 +842,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         // Scale down and fade back AFTER it stays on screen for a bit
-        gsap.fromTo(step, 
-          { scale: 1, opacity: 1 }, 
+        gsap.fromTo(step,
+          { scale: 1, opacity: 1 },
           {
             scale: 0.85,
             opacity: 0.3,
