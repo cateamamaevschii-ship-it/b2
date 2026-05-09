@@ -534,18 +534,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    const isMobileTeam = window.matchMedia("(max-width: 900px)").matches;
+
     teamTl
       // Phase 1: Mutarea textelor initiale si Colorarea portretelor
       .to(".team-bg-text", { scale: 1.2, opacity: 0.5, duration: 1 }, 0)
       .to(".team-fg-text", { y: "-15vh", ease: "power1.inOut", duration: 1 }, 0)
-      .to(".portrait img.color", { opacity: 1, duration: 1, ease: "power2.inOut" }, 0)
+      .to(".portrait img.color", { opacity: 1, duration: 1, ease: "power2.inOut" }, 0);
 
-      // Phase 2: Dupa ce se coloreaza, portretele se dau in parti de tot (ies din ecran) - MAI INCET SI LINIAR
-      .to(".left-portrait", { x: "-60vw", ease: "none", duration: 4 }, 1)
-      .to(".right-portrait", { x: "60vw", ease: "none", duration: 4 }, 1)
+    // Phase 2: Pe mobile urca in sus, pe desktop se dau in parti
+    if (isMobileTeam) {
+      teamTl.to(".team-portraits", { y: "-100vh", ease: "none", duration: 4 }, 1);
+    } else {
+      teamTl.to(".left-portrait", { x: "-100vw", ease: "none", duration: 4 }, 1)
+            .to(".center-portrait", { x: "-100vw", ease: "none", duration: 4 }, 1)
+            .to(".right-portrait", { x: "100vw", ease: "none", duration: 4 }, 1);
+    }
 
-      // Phase 3: Textul descriptiv apare si este pozitionat mult mai jos
-      .fromTo(".team-intro-text", { y: "25vh", opacity: 0 }, { y: "15vh", opacity: 1, ease: "power2.out", duration: 1.5 }, 3.5)
+    teamTl
+      // Phase 3: Textul descriptiv apare si este pozitionat mult mai jos, venind de jos pe mobile
+      .fromTo(".team-intro-text", { y: isMobileTeam ? "40vh" : "25vh", opacity: 0 }, { y: "15vh", opacity: 1, ease: "power2.out", duration: 1.5 }, 3.5)
 
       .to({}, { duration: 0.5 }); // Buffer before unpinning
 

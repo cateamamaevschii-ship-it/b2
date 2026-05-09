@@ -1321,7 +1321,7 @@ footer {
   /* required for absolute image overlapping */
   height: 100vh;
   /* Adjusted scale to reach the top area as seen in screenshot */
-  width: 50%;
+  width: 33.333%;
 }
 
 .portrait img {
@@ -1348,6 +1348,10 @@ footer {
   right: 0;
   object-position: bottom right;
   /* Anchor visual weight perfectly to the center gap */
+}
+
+.center-portrait img {
+  object-position: bottom center;
 }
 
 .right-portrait img {
@@ -1457,7 +1461,7 @@ footer {
   .portrait {
     height: 100vh;
     /* Occupies almost the entire screen height on mobile */
-    width: 50%;
+    width: 33.333%;
   }
 
   .portrait img {
@@ -1976,7 +1980,7 @@ footer {
 
 /* Spacing / Rest Sections (Cinematic Gaps) */
 .section-spacer {
-  height: 100vh;
+  height: 80vh;
   background-color: var(--bg-color);
   position: relative;
   z-index: 20;
@@ -2614,4 +2618,4 @@ footer {
   }
 }
 
-.team-bg-text
+.section-spacer
