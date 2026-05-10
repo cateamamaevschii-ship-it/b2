@@ -1304,7 +1304,6 @@ footer {
 .team-portraits {
   position: absolute;
   bottom: 0;
-  /* Anchors securely to the very floor of the screen */
   left: 0;
   width: 100%;
   height: 100vh;
@@ -1312,24 +1311,23 @@ footer {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  /* Images drop flush to the bottom */
 }
 
 /* Make image cutouts explicitly mathematically centered on both halves */
 .portrait {
   position: relative;
-  /* required for absolute image overlapping */
   height: 100vh;
-  /* Adjusted scale to reach the top area as seen in screenshot */
   width: 33.333%;
 }
 
 .portrait img {
   position: absolute;
   bottom: 0;
+  left: 0;
   height: 100%;
   width: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  object-position: center 5%; /* Aligns near the top to prevent head crop, crops bottom */
 }
 
 /* Grayscale Base */
@@ -1345,19 +1343,21 @@ footer {
 }
 
 .left-portrait img {
-  right: 0;
-  object-position: bottom right;
-  /* Anchor visual weight perfectly to the center gap */
+  object-position: center 5%;
 }
 
 .center-portrait img {
-  object-position: bottom center;
+  object-position: center 5%;
 }
 
 .right-portrait img {
-  left: 0;
-  object-position: bottom left;
-  /* Anchor visual weight perfectly to the center gap */
+  object-position: center 5%;
+}
+
+.right-portrait img {
+  object-position: bottom center;
+  /* transform: translateY(14vh); */
+  /* Pushes the image down slightly to align eyes */
 }
 
 .team-fg-text {
