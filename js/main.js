@@ -542,8 +542,10 @@ document.addEventListener("DOMContentLoaded", () => {
       .to(".team-fg-text", { y: "-15vh", ease: "power1.inOut", duration: 1 }, 0)
       .to(".portrait img.color", { opacity: 1, duration: 1, ease: "power2.inOut" }, 0);
 
-    // Phase 2: Pe toate ecranele imaginile urca in sus (nu se mai separa pe desktop)
-    teamTl.to(".team-portraits", { y: "-100vh", ease: "none", duration: 4 }, 1);
+    // Phase 2: Imaginile se despart in parti (nu mai urca in sus)
+    teamTl.to(".left-portrait", { xPercent: -101, ease: "none", duration: 4 }, 1)
+          .to(".right-portrait", { xPercent: 101, ease: "none", duration: 4 }, 1)
+          .to(".center-portrait", { yPercent: 101, opacity: 0, ease: "none", duration: 4 }, 1);
 
     teamTl
       // Phase 3: Textul descriptiv apare si este pozitionat mult mai jos, venind de jos pe mobile
