@@ -961,42 +961,33 @@ section {
 
 .scroll-text-section {
   position: relative;
-  height: 250vh;
-  /* Restore to match original length */
   background-color: var(--bg-color);
   z-index: 10;
-  padding: 0;
+  padding: 10rem 0;
 }
 
 .scroll-text-container {
-  position: sticky;
-  top: 0;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 0 5%;
   text-align: center;
-  /* Centered layout */
 }
 
 .scroll-text-container h2 {
   font-size: clamp(1.5rem, 6vw, 6.5rem);
-  /* Scaled slightly for single-block sentence */
   line-height: 1.1;
   font-weight: 500;
-  /* Matching Motto weight */
   text-transform: uppercase;
-  /* Matching Motto style */
   letter-spacing: 2px;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 .scroll-text-container h2 span {
-  opacity: 0.15;
-  transition: opacity 0.1s ease;
+  opacity: 1;
+  transition: opacity 0.2s ease;
 }
 
 /* Studio Mission (Combined Sequence) */
@@ -1848,12 +1839,10 @@ footer {
   align-items: center;
   justify-content: center;
   background: #d4d4d4;
-  /* Light gray instead of white/lightest gray */
   color: #333;
-  /* Dark gray instead of black */
-  padding: 0.8rem 2.8rem;
+  padding: 1.2rem 4rem;
   border-radius: 50px;
-  font-size: 0.85rem;
+  font-size: 1.05rem;
   font-weight: 500;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -1865,9 +1854,7 @@ footer {
 
 .btn-yodezeen:hover {
   background: #333;
-  /* Dark gray instead of black */
   color: #d4d4d4;
-  /* Light gray instead of white */
   transform: scale(1.05);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
@@ -2578,6 +2565,68 @@ footer {
   color: var(--accent-color);
 }
 
+/* Service Description Section */
+.service-description-section {
+  position: relative;
+  width: 100%;
+  background-color: var(--bg-color);
+  padding: 8rem 5%;
+  min-height: 80vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 520px);
+  gap: 4rem;
+  align-items: stretch;
+  z-index: 20;
+}
+
+.service-desc-content {
+  max-width: 760px;
+  margin: 0;
+  width: min(100%, 760px);
+  text-align: left;
+}
+
+.service-desc-text {
+  font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+  line-height: 1.75;
+  color: var(--text-secondary);
+  font-weight: 300;
+  letter-spacing: 0.4px;
+  font-family: 'Cormorant Garamond', serif;
+  opacity: 0;
+  animation: fadeInUp 0.8s ease-out forwards;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: none;
+}
+
+.service-desc-image {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.3);
+}
+
+.service-desc-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (max-width: 900px) {
   .process-step {
     grid-template-columns: 100px 1fr;
@@ -2591,6 +2640,20 @@ footer {
 
   .process-step-body h3 {
     font-size: clamp(1.5rem, 5vw, 3rem);
+  }
+
+  .service-description-section {
+    display: grid;
+    grid-template-columns: 1fr;
+    padding: 6rem 4%;
+  }
+
+  .service-desc-content {
+    text-align: center;
+  }
+
+  .service-desc-image {
+    min-height: 320px;
   }
 }
 
@@ -2618,4 +2681,340 @@ footer {
   }
 }
 
-.section-spacer
+.filter-btn:hover, .filter-btn.active {
+      color: var(--accent-color) !important;
+    }
+
+/* ========== Portrait Hover Effects (About Page) ========== */
+.portrait-link {
+  display: block;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.portrait-link:hover {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+.portrait-link:hover img.color {
+  opacity: 1 !important;
+}
+
+.portrait-link:hover img.bw {
+  opacity: 0;
+}
+
+/* ========== Individual Profile Page Styles ========== */
+.profile-page {
+  min-height: 100vh;
+  padding-top: var(--header-height);
+}
+
+.profile-hero {
+  display: grid;
+  grid-template-columns: minmax(420px, 1.1fr) minmax(320px, 0.9fr);
+  min-height: calc(100vh - var(--header-height));
+  align-items: start;
+  padding: 3rem 5% 4rem;
+  gap: 4rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  width: 100%;
+  max-width: none;
+}
+
+.profile-label {
+  color: var(--accent-color);
+  letter-spacing: 3px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+}
+
+.profile-name {
+  font-size: clamp(3rem, 7vw, 6rem);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+}
+
+.profile-role {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+}
+
+.profile-bio {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.85;
+  font-weight: 300;
+  max-width: 100%;
+}
+
+.profile-bio p {
+  margin-bottom: 1.5rem;
+}
+
+.profile-image-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 620px;
+  justify-self: end;
+  align-self: start;
+  overflow: hidden;
+}
+
+.profile-image-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(5, 5, 5, 0.22);
+  backdrop-filter: blur(18px);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.profile-image-wrapper img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  filter: grayscale(30%);
+  transition: transform 0.6s ease, filter 0.6s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.profile-image-wrapper:hover img {
+  transform: scale(1.08);
+  filter: grayscale(0%) brightness(1.08);
+}
+
+.profile-image-wrapper:hover::before {
+  opacity: 1;
+}
+
+.profile-image-wrapper:hover .profile-image-accent {
+  transform: translate(14px, 14px);
+  opacity: 0.22;
+}
+
+.profile-image-accent {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--accent-color);
+  opacity: 0.3;
+  z-index: -1;
+}
+
+/* Profile big name section */
+.profile-big-name {
+  padding: 6rem 5%;
+  overflow: hidden;
+}
+
+.profile-big-name h2 {
+  font-size: clamp(4rem, 15vw, 16rem);
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  line-height: 0.9;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  opacity: 0.08;
+}
+
+/* Profile details section */
+.profile-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  padding: 6rem 5%;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.profile-details-col h3 {
+  color: var(--accent-color);
+  font-size: 0.85rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+  font-weight: 400;
+}
+
+.profile-details-col p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+.profile-details-col ul {
+  list-style: none;
+  padding: 0;
+}
+
+.profile-details-col ul li {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 2;
+  font-weight: 300;
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+.profile-details-col ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  background: var(--accent-color);
+  border-radius: 50%;
+}
+
+/* Profile stats */
+.profile-stats {
+  display: flex;
+  gap: 4rem;
+  padding: 4rem 5%;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.profile-stat {
+  text-align: left;
+}
+
+.profile-stat .stat-number {
+  font-size: 3rem;
+  font-weight: 200;
+  color: var(--accent-color);
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.profile-stat .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 300;
+}
+
+/* Back to team link */
+.profile-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--accent-color);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 4rem 5%;
+  transition: var(--transition-smooth);
+}
+
+.profile-back:hover {
+  gap: 1.2rem;
+}
+
+.profile-back svg {
+  transition: transform 0.3s ease;
+}
+
+.profile-back:hover svg {
+  transform: translateX(-4px);
+}
+
+/* Profile page responsive */
+@media (max-width: 768px) {
+  .profile-hero {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem 5%;
+  }
+
+  .profile-image-wrapper {
+    max-width: 100%;
+    order: -1;
+    justify-self: center;
+  }
+
+  .profile-details {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 3rem 5%;
+  }
+
+  .profile-stats {
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+
+  .profile-name {
+    font-size: clamp(2rem, 10vw, 4rem);
+  }
+}
+
+/* Interactive team hover effects for about.html */
+.team-portraits {
+  transition: all 0.6s ease;
+}
+
+.team-portraits:hover .portrait {
+  filter: blur(8px);
+  opacity: 0.35;
+}
+
+.team-portraits:hover .portrait:hover {
+  filter: blur(0);
+  opacity: 1;
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+/* Force show the color portrait image on hover */
+.team-portraits:hover .portrait:hover img.color {
+  opacity: 1 !important;
+}
+
+/* Blur background and foreground texts in team section on hover */
+.team-hero:has(.portrait:hover) .team-bg-text,
+.team-hero:has(.portrait:hover) .team-fg-text,
+.team-hero:has(.portrait:hover) .team-footnotes {
+  filter: blur(8px);
+  opacity: 0.15;
+}
+
+/* Ensure smooth transitions for all team section elements */
+.team-bg-text,
+.team-fg-text,
+.team-footnotes,
+.portrait {
+  transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+

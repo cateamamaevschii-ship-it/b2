@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -8,11 +8,531 @@
   <meta name="description"
     content="Explore our portfolio of high-end dark minimalist architecture and interior design projects.">
   <link rel="icon" href="images/logo/favicon.svg" type="image/x-icon">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="./css/style.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
   <style>
-    .page-hero {
-      padding: 15rem 5% 5rem 5%;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    /* ═══════════════════════════════════════════════════════
+       CODEKA-INSPIRED PROJECTS PAGE — B2 DARK THEME
+       ═══════════════════════════════════════════════════════ */
+
+    body {
+      padding-top: 0 !important;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Hide default header on this page — we use our own minimal nav */
+    header.always-visible {
+      background: transparent !important;
+      border-bottom: none !important;
+      backdrop-filter: none !important;
+    }
+
+    /* ── Main Layout ── */
+    .projects-section {
+      display: flex;
+      height: calc(100vh - 14px);
+      margin: 7px;
+      position: relative;
+      background-color: var(--bg-color);
+    }
+
+    /* ── LEFT SIDEBAR — Categories ── */
+    .projects-sidebar-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 280px;
+      flex-shrink: 0;
+      padding: 0 2.5rem;
+      position: sticky;
+      top: 0;
+      height: 100%;
+    }
+
+    .sidebar-left-bottom {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(240, 240, 240, 0.25);
+      font-weight: 300;
+      position: absolute;
+      bottom: 2.5rem;
+      left: 2.5rem;
+      white-space: nowrap;
+    }
+
+    /* ── Category Filter Pills ── */
+    .sidebar-filters {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sidebar-filter-btn {
+      background: none;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(240, 240, 240, 0.25);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: left;
+      padding: 0.6rem 0;
+    }
+
+    .sidebar-filter-btn:hover,
+    .sidebar-filter-btn.active {
+      color: var(--accent-color);
+    }
+
+    .sidebar-filter-btn.active::before {
+      content: '— ';
+      color: var(--accent-color);
+    }
+
+    /* ── CENTER — Scrollable Images ── */
+    .projects-center {
+      flex: 1;
+      overflow-y: auto;
+      height: 100%;
+      scroll-behavior: auto;
+      /* We manage smoothness ourselves */
+    }
+
+    /* Hide scrollbar */
+    .projects-center::-webkit-scrollbar {
+      display: none;
+    }
+
+    .projects-center {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .project-slot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 55vh;
+      cursor: pointer;
+      padding: 1.5vh 0;
+    }
+
+    .project-slot-inner {
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      height: 100%;
+      aspect-ratio: 3 / 2;
+      max-width: 100%;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+        opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      background-color: #0a0a0a;
+    }
+
+    .project-slot-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 1.5s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .project-slot:hover .project-slot-inner img {
+      transform: scale(1.03);
+    }
+
+    /* Hover overlay */
+    .project-slot-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      transition: background 0.4s ease;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 2.5rem;
+      pointer-events: none;
+    }
+
+    .project-slot:hover .project-slot-overlay {
+      background: rgba(0, 0, 0, 0.15);
+    }
+
+    .project-slot-overlay span {
+      color: #fff;
+      font-size: 0.7rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: all 0.35s ease;
+    }
+
+    .project-slot:hover .project-slot-overlay span {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Bottom gradient info strip */
+    .project-slot-meta {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem 2rem;
+      background: linear-gradient(to top, rgba(5, 5, 5, 0.7) 0%, transparent 100%);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      pointer-events: none;
+    }
+
+    .project-slot-meta .tags {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .project-slot-meta .year {
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.3);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ── Active Project Number (bottom-right of center area) ── */
+    .active-project-number {
+      position: absolute;
+      bottom: 2.5rem;
+      right: 2.5rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: rgba(240, 240, 240, 0.12);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      pointer-events: none;
+      z-index: 30;
+    }
+
+
+    /* ═══════════════════════════════════════════════════════
+       DETAIL VIEW OVERLAY
+       ═══════════════════════════════════════════════════════ */
+    .detail-overlay {
+      position: fixed;
+      z-index: 9000;
+      top: 7px;
+      left: 7px;
+      right: 7px;
+      bottom: 7px;
+      background-color: var(--bg-color);
+      display: flex;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.5s cubic-bezier(0.76, 0, 0.24, 1),
+        transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+      pointer-events: none;
+    }
+
+    .detail-overlay.open {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* Detail Left Panel */
+    .detail-left {
+      width: 36%;
+      padding: 2.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      height: 100%;
+      border-right: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .detail-info {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s 0.15s cubic-bezier(0.76, 0, 0.24, 1),
+        transform 0.65s 0.15s cubic-bezier(0.76, 0, 0.24, 1);
+    }
+
+    .detail-overlay.open .detail-info {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .detail-counter {
+      font-size: 0.65rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(240, 240, 240, 0.2);
+      margin-bottom: 1.5rem;
+    }
+
+    .detail-title {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 500;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1.05;
+      text-transform: uppercase;
+      margin-bottom: 0;
+    }
+
+    .detail-category {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-top: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .detail-tags {
+      font-size: 0.65rem;
+      color: rgba(240, 240, 240, 0.2);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-top: 0.75rem;
+    }
+
+    .detail-year {
+      font-size: 0.8rem;
+      color: rgba(240, 240, 240, 0.15);
+      margin-top: 1rem;
+    }
+
+    .detail-back-btn {
+      background: none;
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: rgba(240, 240, 240, 0.25);
+      cursor: pointer;
+      transition: color 0.3s ease;
+      text-align: left;
+      padding: 0;
+    }
+
+    .detail-back-btn:hover {
+      color: var(--accent-color);
+    }
+
+    /* Detail Right Panel — Scrollable Images */
+    .detail-right {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    .detail-right::-webkit-scrollbar {
+      display: none;
+    }
+
+    .detail-right {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .detail-image-slot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 85vh;
+      padding: 1.5vh 0;
+    }
+
+    .detail-image-inner {
+      position: relative;
+      overflow: hidden;
+      border-radius: 3px;
+      height: 100%;
+      aspect-ratio: 3 / 2;
+      max-width: 100%;
+      background-color: #0a0a0a;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+        opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .detail-image-inner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .detail-image-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0.25rem;
+    }
+
+    .detail-image-label .label-text {
+      font-size: 0.6rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(240, 240, 240, 0.3);
+    }
+
+    .detail-image-label .label-num {
+      font-size: 0.6rem;
+      font-variant-numeric: tabular-nums;
+      color: rgba(240, 240, 240, 0.2);
+    }
+
+
+    /* ═══════════════════════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .projects-sidebar-left {
+        display: none;
+      }
+
+      .active-project-number {
+        display: none;
+      }
+
+      .projects-section {
+        margin: 0;
+        height: 100vh;
+      }
+
+      .projects-center {
+        width: 100%;
+      }
+
+      /* Mobile: add a top bar with filters */
+      .mobile-top-bar {
+        display: flex;
+        flex-direction: column;
+        padding: 100px 5% 1.5rem;
+        gap: 1rem;
+      }
+
+      .mobile-page-title {
+        font-size: 2rem;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        color: var(--text-primary);
+      }
+
+      .mobile-filters {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .mobile-filter-btn {
+        background: none;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: rgba(240, 240, 240, 0.4);
+        cursor: pointer;
+        padding: 0.5rem 1rem;
+        border-radius: 2px;
+        transition: all 0.3s ease;
+      }
+
+      .mobile-filter-btn.active {
+        color: var(--accent-color);
+        border-color: var(--accent-color);
+      }
+
+      .project-slot {
+        height: 45vh;
+      }
+
+      .project-slot-inner {
+        aspect-ratio: 16 / 10;
+        width: 90%;
+        margin: 0 auto;
+      }
+
+      /* Detail view mobile */
+      .detail-overlay {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        flex-direction: column;
+      }
+
+      .detail-left {
+        display: none;
+      }
+
+      .detail-right {
+        width: 100%;
+      }
+
+      .detail-mobile-hero {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 92vh;
+        padding: 2rem 5% 3rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .detail-mobile-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .detail-mobile-close {
+        background: none;
+        border: 1px solid var(--text-primary);
+        color: var(--text-primary);
+        font-family: 'Outfit', sans-serif;
+        font-size: 0.7rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .detail-mobile-close:hover {
+        background: var(--text-primary);
+        color: var(--bg-color);
+      }
+
+      .detail-mobile-info {
+        margin-top: 3rem;
+      }
+
+      .detail-image-slot {
+        height: 75vh;
+      }
+    }
+
+    @media (min-width: 1025px) {
+      .mobile-top-bar {
+        display: none;
+      }
+
+      .detail-mobile-hero {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -20,16 +540,17 @@
 <body>
 
   <!-- Header -->
-  <header class="scrolled always-visible"> <!-- Force scrolled state for inner pages -->
+  <header class="scrolled always-visible">
     <a href="index.html" class="logo">B&sup2;<span>STUDIO</span></a>
     <div style="display:flex; align-items:center;">
       <ul class="nav-links">
         <li><a href="index.html" data-i18n="nav_home">Home</a></li>
         <li><a href="projects.html" class="active" data-i18n="nav_projects">Projects</a></li>
+        <li><a href="shop.html" data-i18n="nav_shop">Shop</a></li>
         <li><a href="services.html" data-i18n="nav_services">Services</a></li>
         <li><a href="about.html" data-i18n="nav_studio">Studio</a></li>
         <li><a href="contact.html" data-i18n="nav_contact">Contact</a></li>
-              <li>
+        <li>
           <ul class="mobile-socials">
             <li><a href="https://www.instagram.com/_b2studio_/" target="_blank" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a></li>
             <li><a href="https://www.facebook.com/profile.php?id=61587555694743#" target="_blank" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a></li>
@@ -38,8 +559,8 @@
         </li>
       </ul>
       <div class="language-switcher">
-        <button data-lang="en" class="active" data-i18n="lang_en">EN</button>
-        <button data-lang="ro" data-i18n="lang_ro">RO</button>
+        <button data-lang="ro" class="active" data-i18n="lang_ro">RO</button>
+        <button data-lang="en" data-i18n="lang_en">EN</button>
         <button data-lang="ru" data-i18n="lang_ru">RU</button>
       </div>
       <div class="burger-menu" id="burger-menu">
@@ -49,112 +570,588 @@
     </div>
   </header>
 
-  <section class="page-hero">
-    <span style="color: var(--accent-color); letter-spacing: 3px; font-size: 1rem; margin-bottom: 1rem; display: block;"
-      data-i18n="projects_page_subtitle">OUR WORK</span>
-    <h1 data-i18n="projects_page_title">Selected Projects</h1>
-  </section>
+  <!-- ═══ MAIN PROJECTS SECTION ═══ -->
+  <section class="projects-section" id="projects-section">
 
-  <section id="projects-list">
-    <div class="projects-grid">
-      <!-- Project 1 -->
-      <div class="project-card reveal">
-        <div class="project-image-wrapper">
-          <img src="images/project_1.png" alt="Sleek Modern Concrete Exterior at Twilight">
-        </div>
-        <div class="project-info">
-          <h3 data-i18n="proj1_title">The Monolith Residence</h3>
-          <span class="project-category" data-i18n="proj1_cat">Architecture</span>
-        </div>
+    <!-- LEFT SIDEBAR — Categories Only -->
+    <div class="projects-sidebar-left">
+      <div class="sidebar-filters" id="sidebar-filters">
+        <!-- Populated by JS -->
       </div>
-      <!-- Project 2 -->
-      <div class="project-card reveal">
-        <div class="project-image-wrapper">
-          <img src="images/project_2.png" alt="Luxury Moody Dark Kitchen">
-        </div>
-        <div class="project-info">
-          <h3 data-i18n="proj2_title">Noir Penthouse</h3>
-          <span class="project-category" data-i18n="proj2_cat">Interior Design</span>
-        </div>
-      </div>
-      <!-- Project 3 -->
-      <div class="project-card reveal">
-        <div class="project-image-wrapper">
-          <img src="images/hero_interior.png" alt="Dark minimalist living room">
-        </div>
-        <div class="project-info">
-          <h3 data-i18n="proj3_title">Shadow Pavilion</h3>
-          <span class="project-category" data-i18n="proj3_cat">Architecture</span>
-        </div>
-      </div>
-      <!-- Project 4 -->
-      <div class="project-card reveal">
-        <div class="project-image-wrapper">
-          <img src="images/hero_interior_2.png" alt="Dark minimalist space">
-        </div>
-        <div class="project-info">
-          <h3 data-i18n="proj4_title">Aura Loft</h3>
-          <span class="project-category" data-i18n="proj4_cat">Interior Design</span>
-        </div>
-      </div>
-      <!-- Project 5 -->
-      <div class="project-card reveal">
-        <div class="project-image-wrapper">
-          <img src="images/project_1.png" alt="Sleek Modern Concrete Exterior at Twilight">
-        </div>
-        <div class="project-info">
-          <h3 data-i18n="proj5_title">Brutalist Haven</h3>
-          <span class="project-category" data-i18n="proj5_cat">Architecture</span>
-        </div>
-      </div>
-      <!-- Project 6 -->
-      <div class="project-card reveal">
-        <div class="project-image-wrapper">
-          <img src="images/panoramic_interior.png" alt="Panoramic Interior">
-        </div>
-        <div class="project-info">
-          <h3 data-i18n="proj6_title">Onyx Estate</h3>
-          <span class="project-category" data-i18n="proj6_cat">Interior Design</span>
-        </div>
-      </div>
+      <span class="sidebar-left-bottom" data-i18n="footer_rights">© 2026 B2 Studio. All Rights Reserved.</span>
     </div>
+
+    <!-- CENTER — Scrollable Project Images -->
+    <div class="projects-center" id="projects-center">
+      <!-- Mobile top bar -->
+      <div class="mobile-top-bar">
+        <h1 class="mobile-page-title" data-i18n="nav_projects">Projects</h1>
+        <div class="mobile-filters" id="mobile-filters">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      <!-- Project slots populated by JS -->
+    </div>
+
+    <!-- Active project number -->
+    <div class="active-project-number" id="active-project-number">01</div>
+
   </section>
 
-  <!-- Footer -->
-  <footer>
+  <!-- ═══ DETAIL OVERLAY ═══ -->
+  <div class="detail-overlay" id="detail-overlay">
+    <!-- Left panel (desktop) -->
+    <div class="detail-left" id="detail-left">
+      <a href="index.html" class="logo">B&sup2;<span>STUDIO</span></a>
+      <div class="detail-info" id="detail-info">
+        <p class="detail-counter" id="detail-counter"></p>
+        <h2 class="detail-title" id="detail-title"></h2>
+        <p class="detail-category" id="detail-category"></p>
+        <p class="detail-tags" id="detail-tags"></p>
+        <p class="detail-year" id="detail-year"></p>
+      </div>
+      <button class="detail-back-btn" id="detail-back-btn" data-i18n="detail_back">← Back</button>
+    </div>
+    <!-- Right panel — scrollable images -->
+    <div class="detail-right" id="detail-right">
+      <!-- Mobile hero (shown only on mobile) -->
+      <!-- Images injected by JS -->
+    </div>
+  </div>
+
+  <!-- Footer (hidden on this page layout but kept for SEO) -->
+  <footer style="display:none;">
     <div class="footer-top reveal">
       <div class="footer-brand">
         <h2>B&sup2;<span>STUDIO</span></h2>
-        <p data-i18n="footer_desc">Creating bold, minimalist spaces globally. Bespoke architecture and interior design
-          for the modern visionary.</p>
-      </div>
-      <div class="footer-col">
-        <h4 data-i18n="footer_nav">Navigation</h4>
-        <ul>
-          <li><a href="index.html" data-i18n="nav_home">Home</a></li>
-          <li><a href="projects.html" data-i18n="nav_projects">Projects</a></li>
-          <li><a href="about.html" data-i18n="nav_studio">Studio</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4 data-i18n="footer_socials">Socials</h4>
-        <ul style="display:flex; gap:1.5rem; list-style:none; padding:0;">
-          <li><a href="https://www.instagram.com/_b2studio_/" target="_blank" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a></li>
-          <li><a href="https://www.facebook.com/profile.php?id=61587555694743#" target="_blank" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg></a></li>
-          <li><a href="https://www.tiktok.com/@b2_studio1" target="_blank" aria-label="TikTok"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 15.68a6.34 6.34 0 0 0 6.27 6.4h.08a6.33 6.33 0 0 0 6.26-5.83v-5.2a7.92 7.92 0 0 0 5 1.77V9.33a4.77 4.77 0 0 1-3.02-.64z"></path></svg></a></li>
-        </ul>
+        <p data-i18n="footer_desc">Creating bold, minimalist spaces globally.</p>
       </div>
     </div>
     <div class="footer-bottom">
-      <span data-i18n="footer_rights">В© 2026 B2 Studio. All Rights Reserved.</span>
-      <span data-i18n="footer_links">Privacy Policy | Terms of Service</span>
+      <span data-i18n="footer_rights">© 2026 B2 Studio. All Rights Reserved.</span>
     </div>
   </footer>
 
   <script src="js/translations.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    /* ═══════════════════════════════════════════════════════
+       PROJECTS DATA
+       ═══════════════════════════════════════════════════════ */
+    const projects = [
+      {
+        id: '01',
+        titleKey: 'proj_new_1_title',
+        category: 'architecture',
+        catKey: 'filter_architecture',
+        tags: 'Architecture · Residential',
+        year: '2023',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80', label: 'Exterior View' },
+          { src: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80', label: 'Side Elevation' },
+          { src: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=80', label: 'Night View' },
+          { src: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=1200&q=80', label: 'Detail' },
+        ]
+      },
+      {
+        id: '02',
+        titleKey: 'proj_new_2_title',
+        category: 'design',
+        catKey: 'filter_design',
+        tags: 'Design · Interior',
+        year: '2024',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80', label: 'Living Area' },
+          { src: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80', label: 'Bedroom' },
+          { src: 'https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?auto=format&fit=crop&w=1200&q=80', label: 'Office Space' },
+          { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', label: 'Overview' },
+        ]
+      },
+      {
+        id: '03',
+        titleKey: 'proj_new_3_title',
+        category: 'outdoors',
+        catKey: 'filter_outdoors',
+        tags: 'Landscape · Exterior',
+        year: '2022',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=1200&q=80', label: 'Garden View' },
+          { src: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1200&q=80', label: 'Terrace' },
+          { src: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80', label: 'Pool Area' },
+          { src: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80', label: 'Exterior Night' },
+        ]
+      },
+      {
+        id: '04',
+        titleKey: 'proj_new_4_title',
+        category: 'consulting',
+        catKey: 'filter_consulting',
+        tags: 'Consulting · Strategy',
+        year: '2023',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80', label: 'Workspace' },
+          { src: 'https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&w=1200&q=80', label: 'Meeting Room' },
+          { src: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80', label: 'Open Plan' },
+          { src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80', label: 'Lobby' },
+        ]
+      },
+      {
+        id: '05',
+        titleKey: 'proj_new_5_title',
+        category: 'outdoors',
+        catKey: 'filter_outdoors',
+        tags: 'Landscape · Zen',
+        year: '2024',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1200&q=80', label: 'Zen Garden' },
+          { src: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80', label: 'Path' },
+          { src: 'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=1200&q=80', label: 'Stone Garden' },
+          { src: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80', label: 'Water Feature' },
+        ]
+      },
+      {
+        id: '06',
+        titleKey: 'proj_new_6_title',
+        category: 'architecture',
+        catKey: 'filter_architecture',
+        tags: 'Architecture · Glass',
+        year: '2023',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80', label: 'Pavilion Exterior' },
+          { src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80', label: 'Structure' },
+          { src: 'https://images.unsplash.com/photo-1545558014-8692077e9b5c?auto=format&fit=crop&w=1200&q=80', label: 'Interior Light' },
+          { src: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=80', label: 'Canopy' },
+        ]
+      },
+      {
+        id: '07',
+        titleKey: 'proj_new_7_title',
+        category: 'design',
+        catKey: 'filter_design',
+        tags: 'Design · Nordic',
+        year: '2024',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80', label: 'Minimalist Space' },
+          { src: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80', label: 'Scandi Lounge' },
+          { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', label: 'Kitchen' },
+          { src: 'https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?auto=format&fit=crop&w=1200&q=80', label: 'Study' },
+        ]
+      },
+      {
+        id: '08',
+        titleKey: 'proj_new_8_title',
+        category: 'architecture',
+        catKey: 'filter_architecture',
+        tags: 'Architecture · Commercial',
+        year: '2022',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1200&q=80', label: 'Atrium Interior' },
+          { src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80', label: 'Facade' },
+          { src: 'https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80', label: 'Glass Wall' },
+          { src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80', label: 'Entrance' },
+        ]
+      },
+      {
+        id: '09',
+        titleKey: 'proj_new_9_title',
+        category: 'consulting',
+        catKey: 'filter_consulting',
+        tags: 'Consulting · Creative',
+        year: '2023',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&w=1200&q=80', label: 'Lab Interior' },
+          { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80', label: 'Collaboration Space' },
+          { src: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80', label: 'Workshop' },
+          { src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80', label: 'Reception' },
+        ]
+      },
+      {
+        id: '10',
+        titleKey: 'proj_new_10_title',
+        category: 'outdoors',
+        catKey: 'filter_outdoors',
+        tags: 'Landscape · Terrace',
+        year: '2024',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80', label: 'Terrace Panorama' },
+          { src: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80', label: 'Evening View' },
+          { src: 'https://images.unsplash.com/photo-1558036117-15d82a90b9b1?auto=format&fit=crop&w=1200&q=80', label: 'Garden Path' },
+          { src: 'https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1200&q=80', label: 'Lounge Deck' },
+        ]
+      },
+      {
+        id: '11',
+        titleKey: 'proj_new_11_title',
+        category: 'design',
+        catKey: 'filter_design',
+        tags: 'Design · Sculptural',
+        year: '2023',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?auto=format&fit=crop&w=1200&q=80', label: 'Staircase' },
+          { src: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80', label: 'Detail View' },
+          { src: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', label: 'Landing' },
+          { src: 'https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80', label: 'Railing' },
+        ]
+      },
+      {
+        id: '12',
+        titleKey: 'proj_new_12_title',
+        category: 'consulting',
+        catKey: 'filter_consulting',
+        tags: 'Consulting · Urban',
+        year: '2024',
+        images: [
+          { src: 'https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1200&q=80', label: 'Masterplan Board' },
+          { src: 'https://images.unsplash.com/photo-1531973576160-7125cd663d86?auto=format&fit=crop&w=1200&q=80', label: 'Presentation' },
+          { src: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80', label: 'Model View' },
+          { src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80', label: 'Office' },
+        ]
+      },
+    ];
+
+    const N = projects.length;
+    const categories = [
+      { key: 'design', labelKey: 'filter_design', label: 'Design' },
+      { key: 'architecture', labelKey: 'filter_architecture', label: 'Architecture' },
+      { key: 'consulting', labelKey: 'filter_consulting', label: 'Consulting' },
+      { key: 'outdoors', labelKey: 'filter_outdoors', label: 'Outdoors' },
+    ];
+
+    let activeFilter = 'architecture';
+    let filteredProjects = projects.filter(p => p.category === 'architecture');
+    let activeIdx = 0;
+
+    const centerEl = document.getElementById('projects-center');
+    const sidebarFilters = document.getElementById('sidebar-filters');
+    const mobileFilters = document.getElementById('mobile-filters');
+    const projectNumberEl = document.getElementById('active-project-number');
+    const detailOverlay = document.getElementById('detail-overlay');
+    const detailRight = document.getElementById('detail-right');
+
+    /* ─── Helpers ─── */
+    function getTranslation(key) {
+      const lang = localStorage.getItem('site_lang') || 'en';
+      return (translations[lang] && translations[lang][key]) || key;
+    }
+
+    /* ─── Build Filter Buttons ─── */
+    function buildFilters() {
+      // Desktop sidebar filters
+      sidebarFilters.innerHTML = '';
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'sidebar-filter-btn' + (cat.key === activeFilter ? ' active' : '');
+        btn.textContent = getTranslation(cat.labelKey);
+        btn.setAttribute('data-i18n', cat.labelKey);
+        btn.addEventListener('click', () => applyFilter(cat.key));
+        sidebarFilters.appendChild(btn);
+      });
+
+      // Mobile filters
+      mobileFilters.innerHTML = '';
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'mobile-filter-btn' + (cat.key === activeFilter ? ' active' : '');
+        btn.textContent = getTranslation(cat.labelKey);
+        btn.setAttribute('data-i18n', cat.labelKey);
+        btn.addEventListener('click', () => applyFilter(cat.key));
+        mobileFilters.appendChild(btn);
+      });
+    }
+
+    function applyFilter(key) {
+      activeFilter = key;
+      filteredProjects = projects.filter(p => p.category === key);
+      activeIdx = 0;
+      buildFilters();
+      renderCenter();
+    }
+
+    /* ─── Render Center Scrollable Area ─── */
+    function renderCenter() {
+      // Remove old project slots (keep mobile-top-bar)
+      const existingSlots = centerEl.querySelectorAll('.project-slot');
+      existingSlots.forEach(s => s.remove());
+
+      // Triple the list for infinite scroll
+      const tripled = [...filteredProjects, ...filteredProjects, ...filteredProjects];
+
+      tripled.forEach((p, i) => {
+        const slot = document.createElement('div');
+        slot.className = 'project-slot';
+        slot.dataset.category = p.category;
+        slot.addEventListener('click', () => openDetail(p));
+
+        slot.innerHTML = `
+          <div class="project-slot-inner">
+            <img src="${p.images[0].src}" alt="${getTranslation(p.titleKey)}" loading="lazy">
+            <div class="project-slot-overlay">
+              <span data-i18n="view_project">View Project →</span>
+            </div>
+            <div class="project-slot-meta">
+              <span class="tags">${p.tags}</span>
+              <span class="year">${p.year}</span>
+            </div>
+          </div>
+        `;
+        centerEl.appendChild(slot);
+      });
+
+      // Set initial scroll to middle copy
+      requestAnimationFrame(() => {
+        const containerH = centerEl.clientHeight || window.innerHeight;
+        const slotH = containerH * 0.55;
+        const sectionH = filteredProjects.length * slotH;
+        const offset = (slotH - containerH) / 2;
+        centerEl.scrollTop = sectionH + offset;
+      });
+    }
+
+    /* ─── Infinite Scroll + Active Tracking ─── */
+    centerEl.addEventListener('scroll', () => {
+      const fN = filteredProjects.length;
+      if (fN === 0) return;
+
+      const containerH = centerEl.clientHeight || window.innerHeight;
+      const slotH = containerH * 0.55;
+      const sectionH = fN * slotH;
+      const offset = (slotH - containerH) / 2;
+      const st = centerEl.scrollTop;
+
+      // Infinite loop
+      if (st >= sectionH * 2 + offset) {
+        centerEl.scrollTop = st - sectionH;
+      } else if (st < sectionH + offset) {
+        centerEl.scrollTop = st + sectionH;
+      }
+
+      // Active index
+      const currentSt = centerEl.scrollTop;
+      const rawIdx = Math.round((currentSt + containerH / 2 - slotH / 2) / slotH);
+      const positiveIdx = ((rawIdx % fN) + fN) % fN;
+
+      if (positiveIdx !== activeIdx) {
+        activeIdx = positiveIdx;
+        projectNumberEl.textContent = filteredProjects[activeIdx]?.id || '01';
+      }
+
+      // Scale-on-scroll for visible slots
+      applyScaleEffect();
+    }, { passive: true });
+
+    /* ─── Scale-on-Scroll Effect ─── */
+    function applyScaleEffect() {
+      const slots = centerEl.querySelectorAll('.project-slot-inner');
+      const containerH = centerEl.clientHeight;
+      const containerRect = centerEl.getBoundingClientRect();
+      const centerY = containerRect.top + containerH / 2;
+
+      slots.forEach(slot => {
+        const rect = slot.getBoundingClientRect();
+        const slotCenterY = rect.top + rect.height / 2;
+        const distance = Math.abs(centerY - slotCenterY);
+        const maxDist = containerH * 0.6;
+        const progress = Math.max(0, 1 - distance / maxDist);
+
+        // Scale: 0.76 → 1
+        const scale = 0.76 + progress * 0.24;
+        // Opacity: 0.25 → 1
+        const opacity = 0.25 + progress * 0.75;
+
+        slot.style.transform = `scale(${scale})`;
+        slot.style.opacity = opacity;
+      });
+    }
+
+    /* ─── Detail View ─── */
+    function openDetail(project, shouldPushState = true) {
+      const fN = filteredProjects.length;
+
+      // Fill left panel info
+      document.getElementById('detail-counter').textContent = `${project.id} / ${String(N).padStart(2, '0')}`;
+      document.getElementById('detail-title').textContent = getTranslation(project.titleKey);
+      document.getElementById('detail-category').textContent = getTranslation(project.catKey);
+      document.getElementById('detail-tags').textContent = project.tags;
+      document.getElementById('detail-year').textContent = project.year;
+
+      // Fill right panel images — triple for infinite scroll
+      const isMobile = window.innerWidth < 1025;
+      const imagesToRender = isMobile ? project.images : [...project.images, ...project.images, ...project.images];
+      const M = project.images.length;
+
+      detailRight.innerHTML = '';
+
+      // Mobile hero
+      if (isMobile) {
+        const hero = document.createElement('div');
+        hero.className = 'detail-mobile-hero';
+        hero.innerHTML = `
+          <div class="detail-mobile-top">
+            <a href="index.html" class="logo">B²<span>STUDIO</span></a>
+            <button class="detail-mobile-close" onclick="closeDetail()">✕ Close</button>
+          </div>
+          <div class="detail-mobile-info">
+            <p class="detail-counter">${project.id} / ${String(N).padStart(2, '0')}</p>
+            <h1 class="detail-title" style="font-size:clamp(2rem,8vw,3.5rem); margin-top:0.75rem;">${getTranslation(project.titleKey)}</h1>
+            <p class="detail-category" style="margin-top:1rem;">${getTranslation(project.catKey)}</p>
+            <p class="detail-tags" style="margin-top:0.5rem;">${project.tags}</p>
+            <p class="detail-year" style="margin-top:0.5rem;">${project.year}</p>
+          </div>
+        `;
+        detailRight.appendChild(hero);
+      }
+
+      const imagesContainer = document.createElement('div');
+      imagesContainer.style.padding = '0 1.5rem';
+
+      imagesToRender.forEach((img, i) => {
+        const wrapper = document.createElement('div');
+
+        const slot = document.createElement('div');
+        slot.className = 'detail-image-slot';
+
+        const inner = document.createElement('div');
+        inner.className = 'detail-image-inner';
+        inner.innerHTML = `<img src="${img.src}" alt="${getTranslation(project.titleKey)} - ${img.label}" loading="lazy">`;
+
+        slot.appendChild(inner);
+        wrapper.appendChild(slot);
+
+        const labelDiv = document.createElement('div');
+        labelDiv.className = 'detail-image-label';
+        labelDiv.innerHTML = `
+          <span class="label-text">${img.label}</span>
+          <span class="label-num">${String((i % M) + 1).padStart(2, '0')}</span>
+        `;
+        wrapper.appendChild(labelDiv);
+
+        imagesContainer.appendChild(wrapper);
+      });
+
+      detailRight.appendChild(imagesContainer);
+
+      if (shouldPushState) {
+        history.pushState({ projectOpen: true }, '', `#project-${project.id}`);
+      }
+
+      // Open overlay
+      detailOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+
+      // Desktop: initialize infinite scroll for detail images
+      if (!isMobile) {
+        requestAnimationFrame(() => {
+          const copyH = detailRight.scrollHeight / 3;
+          detailRight.scrollTop = copyH;
+        });
+
+        detailRight.onscroll = function () {
+          const st = detailRight.scrollTop;
+          const copyH = detailRight.scrollHeight / 3;
+          if (st >= copyH * 2) {
+            detailRight.scrollTop = st - copyH;
+          } else if (st < copyH) {
+            detailRight.scrollTop = st + copyH;
+          }
+          // Scale effect on detail images
+          applyDetailScaleEffect();
+        };
+      }
+
+      // Apply initial scale effect
+      setTimeout(() => {
+        applyDetailScaleEffect();
+      }, 100);
+    }
+
+    function closeDetail(shouldGoBack = true) {
+      detailOverlay.classList.remove('open');
+      document.body.style.overflow = 'hidden'; // Keep body hidden since we're in the projects layout
+      detailRight.onscroll = null;
+
+      if (shouldGoBack && history.state && history.state.projectOpen) {
+        history.back();
+      }
+    }
+
+    document.getElementById('detail-back-btn').addEventListener('click', () => closeDetail());
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && detailOverlay.classList.contains('open')) {
+        closeDetail();
+      }
+    });
+
+    function checkHashAndOpen() {
+      const hash = window.location.hash;
+      const match = hash.match(/^#project-(\d+)/);
+      if (match) {
+        const projId = match[1];
+        const project = projects.find(p => p.id === projId);
+        if (project) {
+          openDetail(project, false);
+        }
+      }
+    }
+
+    window.addEventListener('popstate', () => {
+      const hash = window.location.hash;
+      const match = hash.match(/^#project-(\d+)/);
+      if (match) {
+        const projId = match[1];
+        const project = projects.find(p => p.id === projId);
+        if (project) {
+          openDetail(project, false);
+        }
+      } else {
+        if (detailOverlay.classList.contains('open')) {
+          closeDetail(false);
+        }
+      }
+    });
+
+    /* ─── Scale Effect for Detail View ─── */
+    function applyDetailScaleEffect() {
+      const inners = detailRight.querySelectorAll('.detail-image-inner');
+      const containerH = detailRight.clientHeight;
+      const containerRect = detailRight.getBoundingClientRect();
+      const centerY = containerRect.top + containerH / 2;
+
+      inners.forEach(inner => {
+        const rect = inner.getBoundingClientRect();
+        const slotCenterY = rect.top + rect.height / 2;
+        const distance = Math.abs(centerY - slotCenterY);
+        const maxDist = containerH * 0.6;
+        const progress = Math.max(0, 1 - distance / maxDist);
+
+        const scale = 0.76 + progress * 0.24;
+        const opacity = 0.25 + progress * 0.75;
+
+        inner.style.transform = `scale(${scale})`;
+        inner.style.opacity = opacity;
+      });
+    }
+
+    /* ─── Language switcher re-translation ─── */
+    document.querySelectorAll('.language-switcher button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        setTimeout(() => {
+          buildFilters();
+          // Re-render center to update alt texts
+          renderCenter();
+        }, 50);
+      });
+    });
+
+    /* ─── Initialize ─── */
+    buildFilters();
+    renderCenter();
+    checkHashAndOpen();
+
+    // Initial scale effect
+    setTimeout(() => applyScaleEffect(), 300);
+  </script>
 </body>
 
 </html>
-
-

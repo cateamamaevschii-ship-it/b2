@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Localization Logic
-  let currentLang = localStorage.getItem('site_lang') || 'en';
+  let currentLang = localStorage.getItem('site_lang') || 'ro';
 
   const updateTranslations = () => {
     document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function initResponsiveLineSplits() {
     const targets = document.querySelectorAll(`
       h1:not(.mission-intro-title):not(.hero-title-mask h1):not(.expand-title h1):not(.split-word-left):not(.split-word-right),
-      h2:not(.hero-subtitle):not(#animated-scroll-text):not(.cinematic-overlay h2):not(.split-text-reveal):not(.process-overview-big-title h2),
+      h2:not(.hero-subtitle):not(#animated-scroll-text):not(.cinematic-overlay h2):not(.split-text-reveal):not(.process-overview-big-title h2):not(.huge-name),
       h3,
       h4:not(.expand-title h4),
       p:not(.team-intro-text):not(.mission-bottom-text p):not(.exp-panel p)
@@ -382,33 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Animated Scroll Text
-  const scrollText = document.getElementById('animated-scroll-text');
-  if (scrollText) {
-    window.addEventListener('scroll', () => {
-      const parentSection = scrollText.closest('.scroll-text-section');
-      const rect = parentSection.getBoundingClientRect();
-      const scrollHeight = rect.height - window.innerHeight;
-
-      let progress = -rect.top / scrollHeight;
-
-      if (progress < 0) progress = 0;
-      if (progress > 1) progress = 1;
-
-      const spans = scrollText.querySelectorAll('span');
-      const wordsToShow = Math.floor(progress * spans.length);
-
-      spans.forEach((span, index) => {
-        if (index < wordsToShow) {
-          span.style.opacity = '1';
-        } else {
-          span.style.opacity = '0.15';
-        }
-      });
-    });
-    // Trigger once on load
-    window.dispatchEvent(new Event('scroll'));
-  }
+  // Animated Scroll Text — animation removed, text is static
 
   // Integrated Studio Mission Animation
   const studioMission = document.querySelector('.studio-mission');
@@ -419,10 +393,10 @@ document.addEventListener("DOMContentLoaded", () => {
       scrollTrigger: {
         trigger: studioMission,
         start: "top top",
-        end: "+=1000%", // Extensively increased for an extremely deliberate and slow scroll sequence
+        end: "+=350%", // Reduced pin duration for faster section scroll
         pin: true,
-        scrub: 2.5, // Increased inertia for a "wealthier", more controlled movement feel
-        anticipatePin: 1
+        scrub: 1,
+        anticipatePin: 0.5
       }
     });
 
@@ -473,7 +447,7 @@ document.addEventListener("DOMContentLoaded", () => {
     missionTl.to(".mission-bottom-text", { y: -40, opacity: 1, duration: 2, ease: "power3.out" }, 23)
       .to(".mission-stack-container", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26)
       .to(".mission-bottom-text", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26.5)
-      .to({}, { duration: 5 }); // 7. Dead scroll phase for a clean 'black screen' void transition
+      .to({}, { duration: 1.5 }); // Reduced dead scroll phase for quicker flow
   }
 
   // Cinematic GSAP ScrollTrigger Sequence
@@ -923,3 +897,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
+
