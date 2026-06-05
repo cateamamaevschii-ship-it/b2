@@ -326,9 +326,8 @@
       .detail-mobile-hero {
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
-        min-height: 92vh;
-        padding: 2rem 5% 3rem;
+        justify-content: flex-start;
+        padding: 1.5rem 5% 2rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       }
 
@@ -357,7 +356,7 @@
       }
 
       .detail-mobile-info {
-        margin-top: 3rem;
+        margin-top: 1.5rem;
       }
 
       .detail-image-slot {
@@ -647,6 +646,9 @@
       card.innerHTML = `
         <div class="project-image-wrapper">
           <img src="${product.images[0].src}" alt="${getTranslation(product.titleKey)}" loading="lazy">
+          <div class="shop-card-overlay">
+            <span class="shop-card-name">${getTranslation(product.titleKey)}</span>
+          </div>
         </div>
         <div class="project-info" style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: baseline;">
           <h3 style="font-size: 1.3rem; font-weight: 300; text-transform: uppercase; color: var(--text-primary); transition: color 0.3s ease;">${getTranslation(product.titleKey)}</h3>
@@ -821,8 +823,10 @@
         const maxDist = containerH * 0.6;
         const progress = Math.max(0, 1 - distance / maxDist);
 
-        const scale = 0.76 + progress * 0.24;
-        const opacity = 0.25 + progress * 0.75;
+        // Scale: 0.92 → 1 (subtle, not aggressive)
+        const scale = 0.92 + progress * 0.08;
+        // Opacity: 0.85 → 1 (images stay clearly visible)
+        const opacity = 0.85 + progress * 0.15;
 
         inner.style.transform = `scale(${scale})`;
         inner.style.opacity = opacity;
