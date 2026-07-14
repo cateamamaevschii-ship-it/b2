@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
+  if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+  }
   // Localization Logic
   let currentLang = localStorage.getItem('site_lang') || 'ro';
 
@@ -14,21 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Original Homepage Scroll Text Logic
-    const scrollText = document.getElementById('animated-scroll-text');
-    if (scrollText) {
-      const textToSplit = translations[currentLang]['home_scroll_text'];
-      if (textToSplit) {
-        const words = textToSplit.split(' ');
-        scrollText.innerHTML = '';
-        words.forEach(word => {
-          const span = document.createElement('span');
-          span.innerText = word + ' ';
-          scrollText.appendChild(span);
-        });
-        window.dispatchEvent(new Event('scroll'));
-      }
-    }
+
 
     // Services Motto Word Split Logic
     const serviceMottoLines = document.querySelectorAll('.service-cta-section .split-text-reveal');
@@ -67,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function initResponsiveLineSplits() {
     const targets = document.querySelectorAll(`
       h1:not(.mission-intro-title):not(.hero-title-mask h1):not(.expand-title h1):not(.split-word-left):not(.split-word-right),
-      h2:not(.hero-subtitle):not(#animated-scroll-text):not(.cinematic-overlay h2):not(.split-text-reveal):not(.process-overview-big-title h2):not(.huge-name),
+      h2:not(.hero-subtitle):not(#animated-scroll-text):not(#about-text-1):not(#about-text-2):not(.cinematic-overlay h2):not(.split-text-reveal):not(.process-overview-big-title h2):not(.huge-name),
       h3,
       h4:not(.expand-title h4),
       p:not(.team-intro-text):not(.mission-bottom-text p):not(.exp-panel p)
@@ -183,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const currentScrollY = window.scrollY;
 
     // Hide header on scroll down, show on scroll up
-    if (currentScrollY > lastScrollPos && currentScrollY > 150) {
+    if (currentScrollY > lastScrollPos && currentScrollY > 10) {
       header.classList.add('nav-hidden');
     } else {
       header.classList.remove('nav-hidden');
@@ -285,17 +274,145 @@ document.addEventListener("DOMContentLoaded", () => {
   const preloaderProgress = document.querySelector('.preloader-progress');
   const preloaderLogo = document.querySelector('.preloader-logo');
   const allSlides = document.querySelectorAll('.slide');
+  const navbarLogo = document.querySelector('header .logo');
 
   // Set initial text states before timeline starts to prevent flashes
   if (heroSubtitle) gsap.set(heroSubtitle, { y: '100%' });
   if (heroTitle) gsap.set(heroTitle, { y: '100%' });
   if (headerElem) gsap.set(headerElem, { y: '-100%', opacity: 0 });
-  if (firstSlide) gsap.set(firstSlide, { scale: 1.15 });
+  if (navbarLogo) gsap.set(navbarLogo, { opacity: 0 });
+  if (firstSlide) gsap.set(firstSlide, { scale: 1.0 });
 
   let sliderInterval;
 
   // Wait a small tick before starting animations
-  if (preloader && typeof gsap !== 'undefined') {
+  const preloaderVideo = document.getElementById('preloader-video');
+
+  // Wait a small tick before starting animations
+  if (preloader && preloaderVideo && preloaderLogo && typeof gsap !== 'undefined') {
+    // Speed up the video (e.g. 2.0x speed)
+    try {
+      preloaderVideo.playbackRate = 2.0;
+    } catch (e) {
+      console.warn("Could not set playbackRate immediately:", e);
+    }
+    preloaderVideo.addEventListener('play', () => {
+      try {
+        preloaderVideo.playbackRate = 2.0;
+      } catch (e) {
+        console.warn("Could not set playbackRate on play:", e);
+      }
+    });
+
+    // Lock scroll exactly like Yodezeen prevents scrolling immediately
+    document.body.style.overflow = 'hidden';
+
+    let transitionStarted = false;
+    const startTransition = () => {
+      if (transitionStarted) return;
+      transitionStarted = true;
+
+      // 1. Temporarily show header at its final resting place to measure the target logo position
+      let deltaX = 0;
+      let deltaY = 0;
+      let scale = 1;
+
+      try {
+        if (headerElem) gsap.set(headerElem, { y: '0%', opacity: 1 });
+        if (navbarLogo) gsap.set(navbarLogo, { opacity: 1 });
+
+        const navRect = navbarLogo ? navbarLogo.getBoundingClientRect() : null;
+        const preRect = preloaderLogo ? preloaderLogo.getBoundingClientRect() : null;
+
+        if (navRect && preRect && navRect.width > 0 && preRect.width > 0) {
+          const preCenterX = preRect.left + preRect.width / 2;
+          const preCenterY = preRect.top + preRect.height / 2;
+          const navCenterX = navRect.left + navRect.width / 2;
+          const navCenterY = navRect.top + navRect.height / 2;
+
+          deltaX = navCenterX - preCenterX;
+          deltaY = navCenterY - preCenterY;
+          scale = navRect.width / preRect.width;
+        }
+      } catch (e) {
+        console.error("Error measuring logo rects:", e);
+      }
+
+      // Restore initial state for the animated entrance
+      if (headerElem) gsap.set(headerElem, { y: '-100%', opacity: 0 });
+      if (navbarLogo) gsap.set(navbarLogo, { opacity: 0 });
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          // Unlock scroll and start regular slider
+          document.body.style.overflow = '';
+          if (typeof ScrollTrigger !== 'undefined') {
+            ScrollTrigger.refresh();
+          }
+          startHeroSlider();
+        }
+      });
+
+      // 1. Fade out the preloader curtain (blend in with hero background)
+      tl.to(preloader, {
+        opacity: 0,
+        duration: 1.5,
+        ease: 'power2.out',
+        onComplete: () => {
+          gsap.set(preloader, { display: 'none' });
+        }
+      })
+      // 2. Animate the preloader logo to match the navbar logo position and scale
+      .to(preloaderLogo, {
+        x: deltaX,
+        y: deltaY,
+        scale: scale,
+        duration: 1.2,
+        ease: 'power3.inOut',
+        onComplete: () => {
+          // Show the actual header logo and hide the preloader logo
+          if (navbarLogo) gsap.set(navbarLogo, { opacity: 1 });
+          gsap.set(preloaderLogo, { display: 'none' });
+        }
+      }, 0)
+      // 3. Header drops into place smoothly
+      .to(headerElem, {
+        y: '0%',
+        opacity: 1,
+        duration: 1.2,
+        ease: 'power3.out'
+      }, 0)
+      // 4. Text stagger slide-up (Sub-title first, then title)
+      .to([heroSubtitle, heroTitle], {
+        y: '0%',
+        duration: 1.2,
+        stagger: 0.2,
+        ease: 'power3.out'
+      }, 0.2);
+    };
+
+    // Trigger transition when video ends
+    preloaderVideo.addEventListener('ended', startTransition);
+
+    // Click anywhere on preloader screen or the skip button to skip intro video
+    const skipBtn = preloader.querySelector('.preloader-skip-btn');
+    if (skipBtn) {
+      skipBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        startTransition();
+      });
+    }
+    preloader.addEventListener('click', startTransition);
+
+    // Safety timeout of 5 seconds in case autoplay fails
+    const safetyTimeout = setTimeout(startTransition, 5000);
+    preloaderVideo.addEventListener('ended', () => clearTimeout(safetyTimeout));
+    preloader.addEventListener('click', () => clearTimeout(safetyTimeout));
+    if (skipBtn) {
+      skipBtn.addEventListener('click', () => clearTimeout(safetyTimeout));
+    }
+
+  } else if (preloader && typeof gsap !== 'undefined') {
     // Lock scroll exactly like Yodezeen prevents scrolling immediately
     document.body.style.overflow = 'hidden';
 
@@ -307,43 +424,26 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // 1. Loading progress (simulated aesthetic load)
-    tl.to(preloaderProgress, {
-      width: '100%',
-      duration: 1.5,
-      ease: 'power2.inOut'
+    // 1. Slide up the preloader curtain
+    tl.to(preloader, {
+      y: '-100%',
+      duration: 1.2,
+      ease: 'power4.inOut'
     })
-      // 2. Pulse logo slightly and fade out progress
-      .to(preloaderLogo, {
-        scale: 1.05,
-        opacity: 0,
-        duration: 0.8,
-        ease: 'power2.in'
-      }, '+=0.2')
-      .to(preloaderProgress, {
-        opacity: 0,
-        duration: 0.4
-      }, '<')
-      // 3. Slide up the preloader curtain
-      .to(preloader, {
-        y: '-100%',
-        duration: 1.2,
-        ease: 'power4.inOut'
-      })
-      // 4. Parallax zoom out the active hero image slowly
+      // 2. Parallax zoom out the active hero image slowly
       .to(firstSlide, {
         scale: 1.0,
         duration: 4,
         ease: 'power2.out'
       }, '-=0.8')
-      // 5. Header drops into place smoothly
+      // 3. Header drops into place smoothly
       .to(headerElem, {
         y: '0%',
         opacity: 1,
         duration: 1.2,
         ease: 'power3.out'
       }, '-=3.5')
-      // 6. Text stagger slide-up (Sub-title first, then title)
+      // 4. Text stagger slide-up (Sub-title first, then title)
       .to([heroSubtitle, heroTitle], {
         y: '0%',
         duration: 1.2,
@@ -353,6 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     // Fallback if no preloader (for inner pages)
     if (headerElem) gsap.set(headerElem, { y: '0%', opacity: 1 });
+    if (navbarLogo) gsap.set(navbarLogo, { opacity: 1 });
     if (heroSubtitle) gsap.set(heroSubtitle, { y: '0%' });
     if (heroTitle) gsap.set(heroTitle, { y: '0%' });
     if (firstSlide) gsap.set(firstSlide, { scale: 1.0 });
@@ -362,7 +463,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Hero Slider Logic encapsulated to start *after* the timeline
   function startHeroSlider() {
-    if (allSlides.length > 0) {
+    if (allSlides.length > 1) {
       // Ensure the first slide finishes exactly at scale: 1
       gsap.set(firstSlide, { scale: 1.0 });
 
@@ -385,69 +486,43 @@ document.addEventListener("DOMContentLoaded", () => {
   // Animated Scroll Text — animation removed, text is static
 
   // Integrated Studio Mission Animation
-  const studioMission = document.querySelector('.studio-mission');
-  if (studioMission && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+  // Integrated Studio Mission Animation
+
+  // Yodezeen Style Main Info Scroll Animation
+  const mainInfo = document.querySelector('.main-info');
+  if (mainInfo && window.innerWidth > 1024 && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
     gsap.registerPlugin(ScrollTrigger);
 
-    const missionTl = gsap.timeline({
+    const infoPhoto = mainInfo.querySelector(".main-info__photo");
+    const infoImg = mainInfo.querySelector(".main-info__img img");
+    const infoText = mainInfo.querySelector(".main-info__text");
+    const infoDescr2 = mainInfo.querySelector(".main-info__descr2");
+
+    const tlInfo = gsap.timeline({
+      defaults: { ease: "none" },
       scrollTrigger: {
-        trigger: studioMission,
-        start: "top top",
-        end: "+=350%", // Reduced pin duration for faster section scroll
-        pin: true,
-        scrub: 1,
-        anticipatePin: 0.5
+        trigger: mainInfo,
+        start: "top center",
+        end: "bottom bottom",
+        scrub: true
       }
     });
 
-    // 1. Scene 1: Initial Reveal (Text Only)
-    missionTl.fromTo(".mission-intro-title span", { y: 150, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, stagger: 0.3, ease: "power4.out" }, 0.2)
-      .fromTo(".mission-intro-desc", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5, ease: "power3.out" }, 1);
+    // Animate photo flex-basis from 0% to 100% (covering screen and pushing text off-screen)
+    tlInfo
+      .from(infoPhoto, { flex: "0 0 0%", duration: 1 })
+      .from(infoImg, { scale: 1.2 }, 0)
+      .fromTo(infoText, { yPercent: 100 }, { yPercent: 0 }, 0)
+      .to(infoDescr2, { x: 0, duration: 0.4 }, "<");
 
-    // 2. Text Exits
-    missionTl.to(".mission-intro-title", { y: "-120vh", opacity: 0, duration: 3, ease: "power3.inOut" }, 4.5)
-      .to(".mission-intro-desc", { y: "-120vh", opacity: 0, duration: 2.8, ease: "power3.inOut" }, 4.6)
-      .to(".mission-scroll-arrow", { y: -150, opacity: 0, duration: 2 }, 4.5);
-
-    // 3. Image Enters Full Screen (After text leaves)
-    missionTl.fromTo(".mission-intro-image", { top: "120%", opacity: 0 }, {
-      width: "100vw",
-      height: "100vh",
-      right: "0%",
-      top: "0%",
-      yPercent: 0,
-      y: 0, // Safety reset
-      borderRadius: 0,
-      opacity: 1,
-      duration: 3,
-      ease: "power2.inOut"
-    }, 5.5)
-      .to({}, { duration: 1.5 }); // Keep timeline perfectly timed for the next scene
-
-    // 4. Image Exits completely (Fade + Scale Up)
-    missionTl.to(".mission-intro-image", { scale: 1.1, opacity: 0, duration: 2, ease: "power2.inOut" }, 10);
-
-    // 5. Scene 2 Fade In (on solid black background)
-    missionTl.to(".mission-stack-container", { opacity: 1, scale: 1, duration: 2, ease: "power3.out" }, 12);
-
-    // 6. Stacking Words Logic (Progressive One-by-One Swaps)
-    // --- Step 1: Word 1 Swaps (REFINING -> CAPTURING) ---
-    missionTl.to("#line-1 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 14.5)
-      .to("#line-1 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 15);
-
-    // --- Step 2: Word 2 Swaps (RAW -> DRAMATIC) ---
-    missionTl.to("#line-2 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 17.5)
-      .to("#line-2 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 18);
-
-    // --- Step 3: Word 3 Swaps (ELEGANCE -> LIGHTING) ---
-    missionTl.to("#line-3 .stack-word:nth-child(1)", { y: "-100%", opacity: 0, duration: 1.5 }, 20.5)
-      .to("#line-3 .stack-word:nth-child(2)", { y: "0%", opacity: 1, duration: 1.5 }, 21);
-
-    // Final Reveal of bottom motto
-    missionTl.to(".mission-bottom-text", { y: -40, opacity: 1, duration: 2, ease: "power3.out" }, 23)
-      .to(".mission-stack-container", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26)
-      .to(".mission-bottom-text", { opacity: 0, y: -20, duration: 1.5, ease: "power2.in" }, 26.5)
-      .to({}, { duration: 1.5 }); // Reduced dead scroll phase for quicker flow
+    // Parallax effect on exit scroll
+    ScrollTrigger.create({
+      trigger: mainInfo,
+      start: "bottom bottom",
+      end: "bottom top",
+      scrub: true,
+      animation: gsap.to(infoImg, { yPercent: 40, ease: "none" })
+    });
   }
 
   // Cinematic GSAP ScrollTrigger Sequence
@@ -894,6 +969,53 @@ document.addEventListener("DOMContentLoaded", () => {
           scale: 1,
           ease: "power2.out"
         }, 0.2); // slight overlap so gallery appears as words depart
+    }
+
+    // Parallax Hero Scroll Animation
+    const sliderHero = document.querySelector('.slider-hero');
+    const heroBackground = document.querySelector('.slider-hero .slides');
+    const heroContent = document.querySelector('.slider-hero .hero-content');
+
+    if (sliderHero && heroBackground && window.innerWidth > 1024 && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+
+      gsap.to(heroBackground, {
+        yPercent: 30,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: sliderHero,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+    }
+
+    // Yodezeen Style Work Process Scroll-Linked Tabs
+    const processGrid = document.querySelector('.process-content-grid');
+    if (processGrid && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+      const tabs = processGrid.querySelectorAll('.process-tab');
+      const photos = processGrid.querySelectorAll('.process-photo-item');
+      
+      tabs.forEach((tab, index) => {
+        ScrollTrigger.create({
+          trigger: tab,
+          start: "top 60%",
+          end: "bottom 40%",
+          onToggle: (self) => {
+            if (self.isActive) {
+              tabs.forEach(t => t.classList.remove('active'));
+              tab.classList.add('active');
+              
+              photos.forEach(p => p.classList.remove('active'));
+              if (photos[index]) {
+                photos[index].classList.add('active');
+              }
+            }
+          }
+        });
+      });
     }
   }
 });

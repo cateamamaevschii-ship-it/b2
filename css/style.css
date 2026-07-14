@@ -87,29 +87,61 @@ img {
   justify-content: center;
 }
 
+#preloader-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  cursor: pointer;
+  filter: brightness(0.35);
+}
+
 .preloader-content {
   text-align: center;
 }
 
 .preloader-logo {
-  font-size: 2rem;
+  position: absolute;
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 500;
-  letter-spacing: 4px;
+  letter-spacing: 6px;
   color: var(--text-primary);
   text-transform: uppercase;
-  margin-bottom: 20px;
+  z-index: 10;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 .preloader-logo span {
   font-weight: 200;
   color: var(--text-secondary);
 }
+/* Preloader Skip Button */
+.preloader-skip-btn {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 100;
+}
 
-.preloader-progress {
-  width: 0%;
-  height: 2px;
-  background-color: var(--accent-color);
-  margin: 0 auto;
+.btn-yodezeen.preloader-skip-btn {
+  padding: 0.8rem 2.5rem;
+  font-size: 0.85rem;
+}
+
+@media(max-width: 1023px) {
+  .preloader-skip-btn {
+    bottom: 2rem;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  .preloader-skip-btn:hover {
+    transform: translateX(50%) scale(1.05);
+  }
 }
 
 /* Navigation */
@@ -352,10 +384,10 @@ header.nav-hidden {
 
 .slides {
   position: absolute;
-  top: 0;
+  top: -30%;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 130%;
   z-index: -2;
 }
 
@@ -856,12 +888,23 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  gap: 1rem;
 }
 
 .project-info h3 {
   font-size: 1.5rem;
   font-weight: 400;
   transition: color 0.3s ease;
+  margin: 0;
+}
+
+.project-price-label {
+  display: block;
+  font-size: 0.85rem;
+  color: rgba(240, 240, 240, 0.7);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 0.25rem;
 }
 
 .project-category {
@@ -878,8 +921,8 @@ section {
 /* Cinematic Project Showcase */
 .cinematic-project {
   position: relative;
-  height: 800vh;
-  /* Reverted to 800vh for a massive majestic slow scroll */
+  height: 250vh;
+  /* Reduced from 800vh for a much faster scroll flow */
   background-color: var(--bg-color);
   padding: 0;
 }
@@ -1317,8 +1360,8 @@ footer {
   left: 0;
   height: 100%;
   width: 100%;
-  object-fit: cover;
-  object-position: center 5%; /* Aligns near the top to prevent head crop, crops bottom */
+  object-fit: contain;
+  object-position: bottom center; /* Align people to the bottom so they stand on the ground */
 }
 
 /* Grayscale Base */
@@ -1334,21 +1377,15 @@ footer {
 }
 
 .left-portrait img {
-  object-position: center 5%;
+  object-position: bottom center;
 }
 
 .center-portrait img {
-  object-position: center 5%;
-}
-
-.right-portrait img {
-  object-position: center 5%;
+  object-position: bottom center;
 }
 
 .right-portrait img {
   object-position: bottom center;
-  /* transform: translateY(14vh); */
-  /* Pushes the image down slightly to align eyes */
 }
 
 .team-fg-text {
@@ -1417,6 +1454,11 @@ footer {
 
 /* Responsive */
 @media (max-width: 1024px) {
+  .slides {
+    height: 100% !important;
+    transform: none !important;
+  }
+
   .projects-grid {
     grid-template-columns: 1fr;
     gap: 3rem;
@@ -1456,8 +1498,8 @@ footer {
   }
 
   .portrait img {
-    object-fit: cover;
-    object-position: top center;
+    object-fit: contain;
+    object-position: center !important;
   }
 
   .team-footnotes {
@@ -1787,10 +1829,11 @@ footer {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   text-decoration: none;
   background: var(--bg-elevated);
+  padding-bottom: 4.5rem;
 }
 
 .service-hub-bg {
@@ -1822,7 +1865,6 @@ footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 5rem;
 }
 
 .service-hub-content h2 {
@@ -3016,5 +3058,392 @@ footer {
 .team-footnotes,
 .portrait {
   transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Yodezeen Style Main About & Info Sections */
+.main-about {
+  position: relative;
+  z-index: 2;
+  height: 200vh;
+}
+
+@media(max-width: 1023px) {
+  .main-about {
+    height: 200vh;
+  }
+}
+
+.about-sticky {
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  height: 100%;
+  position: relative;
+}
+
+.helpers {
+  pointer-events: none;
+}
+
+.helpers__item {
+  height: 100vh;
+  left: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.helpers__item:first-child {
+  top: 0;
+}
+
+.helpers__item:last-child {
+  bottom: 0;
+}
+
+.about-content {
+  left: .5rem;
+  position: absolute;
+  top: 43%;
+  width: calc(100% - 1rem);
+}
+
+@media(max-width: 1023px) {
+  .about-content {
+    left: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+  }
+}
+
+.about-content__text {
+  text-align: center;
+  text-transform: uppercase;
+  font-family: inherit;
+  font-size: clamp(2.3rem, 5.5vw, 4.8rem);
+  font-weight: 600;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+  will-change: transform, opacity;
+}
+
+@media(max-width: 1023px) {
+  .about-content__text {
+    font-size: 3.2rem;
+    font-weight: 600;
+    letter-spacing: -0.08rem;
+    line-height: 90%;
+  }
+}
+
+/* Main Info Section */
+.main-info {
+  height: 200vh;
+  /* Reduced from 400vh to make the scroll transition much faster */
+  position: relative;
+  z-index: 2;
+}
+
+@media(max-width: 1023px) {
+  .main-info {
+    height: auto;
+    min-height: 100vh;
+  }
+}
+
+.main-info__sticky {
+  height: 100vh;
+  left: 0;
+  overflow: hidden;
+  position: sticky;
+  top: 0;
+  width: 100%;
+}
+
+@media(max-width: 1023px) {
+  .main-info__sticky {
+    height: auto;
+  }
+}
+
+.main-info__content {
+  display: flex;
+  height: 100%;
+  position: relative;
+}
+
+@media(max-width: 1023px) {
+  .main-info__content {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+}
+
+.main-info__photo {
+  flex: 0 0 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+@media(max-width: 1023px) {
+  .main-info__photo {
+    flex: initial;
+    flex-grow: 1;
+    max-height: 28.375rem;
+  }
+}
+
+.main-info__img {
+  width: 100vw;
+  height: 100%;
+}
+
+.main-info__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.main-info__text {
+  flex: 0 0 50vw;
+  padding-left: 2rem;
+  padding-right: .5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media(max-width: 1023px) {
+  .main-info__text {
+    flex: initial;
+    min-height: 22.1875rem;
+    padding: 2rem 1rem;
+  }
+}
+
+.main-info__descr {
+  margin-bottom: 3rem;
+  width: 36.875rem;
+  font-family: inherit;
+  font-size: clamp(1.5rem, 2.5vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.0;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+@media(max-width: 1023px) {
+  .main-info__descr {
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 100%;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+}
+
+.main-info__descr2 {
+  transform: translate(26.5625rem);
+  width: 17.8125rem;
+}
+
+@media(max-width: 1023px) {
+  .main-info__descr2 {
+    transform: none;
+    width: 100%;
+  }
+}
+
+.split-char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.split-word {
+  display: inline-block;
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  white-space: nowrap;
+}
+
+.main-info__descr2-text {
+  font-family: inherit;
+  font-size: .8125rem;
+  font-weight: 500;
+  margin-bottom: .9375rem;
+  color: var(--text-secondary);
+}
+
+@media(max-width: 1023px) {
+  .main-info__descr2-text {
+    font-size: .75rem;
+    line-height: 110%;
+    margin-bottom: 2.5rem;
+  }
+}
+
+.main-info__descr2-button {
+  display: inline-flex;
+}
+
+/* Yodezeen Style Work Process Section */
+.service-process-yodz {
+  position: relative;
+  background: var(--bg-color);
+  padding: 10rem 0;
+}
+
+.process-title-yodz {
+  font-family: var(--font-neue);
+  font-size: clamp(3rem, 7vw, 6.5rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 5rem;
+  letter-spacing: -0.04em;
+  color: var(--text-primary);
+}
+
+.process-content-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 5%;
+  align-items: start;
+  padding: 0 5%;
+}
+
+.process-left-sticky {
+  position: sticky;
+  top: 15vh;
+  height: 70vh;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.process-photo-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.process-photo-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(1.05);
+}
+
+.process-photo-item.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.process-right-scroll {
+  display: flex;
+  flex-direction: column;
+}
+
+.process-tab {
+  opacity: 0.15;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 3rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.process-tab:last-child {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 6rem;
+}
+
+.process-tab.active {
+  opacity: 1;
+}
+
+.process-tab-num {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+}
+
+.process-tab-title {
+  font-size: clamp(1.5rem, 3.5vw, 2.2rem);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
+  color: var(--text-primary);
+}
+
+.process-tab-desc {
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  max-width: 440px;
+}
+
+@media(max-width: 1023px) {
+  .service-process-yodz {
+    padding: 5rem 0;
+  }
+  .process-title-yodz {
+    margin-bottom: 3rem;
+  }
+  .process-content-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .process-left-sticky {
+    position: relative;
+    top: 0;
+    height: 45vh;
+    width: 100%;
+  }
+  .process-tab {
+    padding: 2rem 0;
+  }
+  .process-tab:last-child {
+    padding-bottom: 2rem;
+  }
+  .process-tab-title {
+    margin-bottom: 0.8rem;
+  }
+}
+
+.process-desc-yodz {
+  max-width: 650px;
+  margin: -3.5rem auto 5rem;
+  text-align: center;
+  padding: 0 5%;
+  font-size: 1.05rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+@media(max-width: 1023px) {
+  .process-desc-yodz {
+    margin: -2rem auto 3rem;
+    font-size: 0.95rem;
+  }
 }
 

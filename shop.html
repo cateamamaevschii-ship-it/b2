@@ -650,9 +650,12 @@
             <span class="shop-card-name">${getTranslation(product.titleKey)}</span>
           </div>
         </div>
-        <div class="project-info" style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: baseline;">
-          <h3 style="font-size: 1.3rem; font-weight: 300; text-transform: uppercase; color: var(--text-primary); transition: color 0.3s ease;">${getTranslation(product.titleKey)}</h3>
-          <span class="project-category" style="color: var(--accent-color); font-size: 0.95rem; font-weight: 500; font-variant-numeric: tabular-nums;">${product.price} €</span>
+        <div class="project-info" style="margin-top: 1.5rem; display: flex; justify-content: space-between; align-items: baseline; gap: 1rem;">
+          <div class="project-title-group" style="flex: 1 1 auto; min-width: 0;">
+            <h3 style="font-size: 1.3rem; font-weight: 300; text-transform: uppercase; color: var(--text-primary); transition: color 0.3s ease; margin: 0;">${getTranslation(product.titleKey)}</h3>
+            <span class="project-price-label" style="display: block; font-size: 0.85rem; color: rgba(240, 240, 240, 0.65); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.3rem;">${getTranslation(product.titleKey)}</span>
+          </div>
+          <span class="project-category" style="color: var(--accent-color); font-size: 0.95rem; font-weight: 500; font-variant-numeric: tabular-nums; white-space: nowrap;">${product.price} €</span>
         </div>
       `;
       return card;
